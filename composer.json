@@ -1,0 +1,24 @@
+{
+  "name": "pipaslot/rest",
+  "description": "API connection via REST",
+  "keywords": [
+    "REST",
+    "pipas",
+    "API"
+  ],
+  "license": "LGPL-3.0",
+  "authors": [
+    {
+      "name": "Petr Štipek",
+      "email": "pipaslot@seznam.cz"
+    }
+  ],
+  "require-dev": {
+    "nette/tester": "~1.3"
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  }
+}
