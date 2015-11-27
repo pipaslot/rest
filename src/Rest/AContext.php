@@ -69,14 +69,16 @@ abstract class AContext implements IContext
 	public function getService($name)
 	{
 		if (!isset($this->services[$name])) {
+			$attempts = array();
 			foreach ($this->mappings as $mapping) {
 				$class = str_replace("*", ucfirst($name), $mapping);
+				$attempts[] = $class;
 				if (class_exists($class)) {
 					$this->services[$name] = new $class($this);
 					break;
 				}
 			}
-			if (empty($this->services[$name])) throw new \OutOfRangeException("Cannot load service with name:'$name'. Please check if you have correctly setup mapping");
+			if (empty($this->services[$name])) throw new \OutOfRangeException("Cannot load service with name:'$name' from choices[" . implode(', ', $attempts) . "]. Please check if you have correctly setup mapping");
 		}
 		return $this->services[$name];
 	}
