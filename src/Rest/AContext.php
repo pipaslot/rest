@@ -13,58 +13,78 @@ use Pipas\Rest\Result\ResultMapper;
  */
 abstract class AContext implements IContext
 {
+	/** @var array Service mapping */
+	private $mappings = array();
+	private $services = array();
 
-    private $repositories = array();
+	/**
+	 * @var Cache
+	 */
+	protected $cache;
 
-    /**
-     * @var Cache
-     */
-    protected $cache;
+	/**
+	 * @var IDriver
+	 */
+	protected $driver;
 
-    /**
-     * @var IDriver
-     */
-    protected $driver;
+	/** @var  ResultMapper */
+	protected $resultMapper;
 
-    /** @var  ResultMapper */
-    protected $resultMapper;
+	function __construct(IDriver $driver, IStorage $cacheStorage)
+	{
+		$this->driver = $driver;
+		$this->cache = new Cache($cacheStorage, get_called_class());
+		$this->resultMapper = ResultMapper::get();
+	}
 
-    function __construct(IDriver $driver, IStorage $cacheStorage)
-    {
-        $this->driver = $driver;
-        $this->cache = new Cache($cacheStorage, get_called_class());
-        $this->resultMapper = ResultMapper::get();
-    }
-
-    /**
-     * Return drive for connection to the API via REST
-     * @return IDriver
-     */
-    public function getDriver()
-    {
-        return $this->driver;
-    }
-
-    /**
-     *
-     * @param string $name
-     * @return IService
-     */
-    public function getRepository($name)
-    {
-        if (!isset($this->repositories[$name])) {
-            $class = get_called_class();
-            $slashPos = strrpos($class, "\\");
-            $repositoryClass = substr($class, 0, $slashPos) . "\\Repository\\" . ucfirst($name) . "Repository";
-            $this->repositories[$name] = new $repositoryClass($this);
-        }
-        return $this->repositories[$name];
-    }
+	/**
+	 * Define mapping for auto-loading of services
+	 * @param string $namespace
+	 * @return $this
+	 * @throws \OutOfRangeException
+	 */
+	function addServiceMapping($namespace)
+	{
+		if (($star = strpos($namespace, "*")) === false) throw new \OutOfRangeException("Namespace must have char '*' used for mapping");
+		if (strpos($namespace, "*", $star + 1) !== false) throw new \OutOfRangeException("Only one char '*' is supported");
+		$this->mappings[$namespace] = $namespace;
+		return $this;
+	}
 
 
-    public function __get($name)
-    {
-        return $this->getRepository($name);
-    }
+	/**
+	 * Return drive for connection to the API via REST
+	 * @return IDriver
+	 */
+	public function getDriver()
+	{
+		return $this->driver;
+	}
+
+	/**
+	 *
+	 * @param string $name
+	 * @return IService
+	 */
+	public function getService($name)
+	{
+		if (!isset($this->services[$name])) {
+			foreach ($this->mappings as $mapping) {
+				$class = str_replace("*", ucfirst($name), $mapping);
+				if (class_exists($class)) {
+					$this->services[$name] = new $class($this);
+					break;
+				}
+			}
+			if (empty($this->services[$name])) throw new \OutOfRangeException("Cannot load service with name:'$name'. Please check if you have correctly setup mapping");
+		}
+		return $this->services[$name];
+	}
+
+
+	public function __get($name)
+	{
+		return $this->getService($name);
+	}
 
 }

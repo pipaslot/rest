@@ -1,6 +1,7 @@
 <?php
 
 namespace Pipas\Rest\Result;
+use Pipas\Rest\RestException;
 
 
 /**
@@ -11,20 +12,21 @@ namespace Pipas\Rest\Result;
 class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorAggregate, IToArrayConversion
 {
     /** @var array */
-    private $_inicializedProperties = array();
+	private $_initializedProperties = array();
 
-    /**
-     * Initialize property by ResultMapper
-     * @param string $propertyName
-     * @param mixed $value
-     * @internal
-     * @return bool
-     */
+	/**
+	 * Initialize property by ResultMapper
+	 * @param string $propertyName
+	 * @param mixed $value
+	 * @param $defaultObjectType
+	 * @return bool
+	 * @internal
+	 */
     public function initializeProperty($propertyName, $value, $defaultObjectType = DataHash::class)
     {
-        if (in_array($propertyName, $this->_inicializedProperties)) return false;
+		if (in_array($propertyName, $this->_initializedProperties)) return false;
         $this->$propertyName = ResultMapper::get()->mapData($value, $defaultObjectType);
-        $this->_inicializedProperties[] = $propertyName;
+		$this->_initializedProperties[] = $propertyName;
         return true;
     }
 
@@ -35,7 +37,7 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
      */
     public function isPropertyInitialized($propertyName)
     {
-        return in_array($propertyName, $this->_inicializedProperties);
+		return in_array($propertyName, $this->_initializedProperties);
     }
 
 
@@ -70,14 +72,14 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
     }
 
     /**
-     * Callback rozhodující zda parametr o zadaném klíči a hodnotě se má ignorovat při vytváření pole z objektu
+	 * Callback decisive parameter for whether a given key and value should be ignored when creating an array of object
      * @param mixed $propertyName
      * @param mixed $value
      * @return boolean
      */
     protected function toArrayFilter($propertyName, $value)
     {
-        if ($propertyName === "_inicializedProperties" OR $propertyName === "_mixedProperties") return true;
+		if ($propertyName === "_initializedProperties" OR $propertyName === "_mixedProperties") return true;
         return false;
     }
 
@@ -93,43 +95,50 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
         return new \RecursiveArrayIterator($this);
     }
 
-    /**
-     * Replaces or appends a item.
-     * @return void
-     */
+	/**
+	 * Replaces or appends a item.
+	 * @param mixed $key
+	 * @param mixed $value
+	 */
     public function offsetSet($key, $value)
     {
         $this->$key = $value;
     }
 
-    /**
-     * Returns a item.
-     * @return mixed
-     */
+	/**
+	 * Returns a item.
+	 * @param mixed $key
+	 * @return mixed
+	 */
     public function offsetGet($key)
     {
         return $this->$key;
     }
 
-    /**
-     * Determines whether a item exists.
-     * @return bool
-     */
+	/**
+	 * Determines whether a item exists.
+	 * @param mixed $key
+	 * @return bool
+	 */
     public function offsetExists($key)
     {
         return isset($this->$key);
     }
 
-    /**
-     * Removes the element from this list.
-     * @return void
-     */
+	/**
+	 * Removes the element from this list.
+	 * @param mixed $key
+	 */
     public function offsetUnset($key)
     {
         unset($this->$key);
     }
 
-    /************** magic methods ***************/
+	/************** magic methods **************
+	 * @param $name
+	 * @return
+	 * @throws RestException
+	 */
 
     public function __get($name)
     {

@@ -29,7 +29,7 @@ abstract class AService extends AReadOnlyService implements IService
 	 * Update existing record
 	 * @param IContract $entity
 	 * @return bool if update was successfully
-	 * @throws \Pipas\Rest\RestException
+	 * @throws RestException
 	 */
 	public function update(IContract $entity)
 	{

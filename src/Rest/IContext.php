@@ -9,7 +9,16 @@ use Pipas\Rest\Result\DataSet;
  * Context designed for connection to remote tables
  * @author Petr Štipek <p.stipek@email.cz>
  */
-interface IContext {
+interface IContext
+{
+
+	/**
+	 * Define mapping for auto-loading of services
+	 * @example 'MyRest/Services/*Service'
+	 * @param $namespace
+	 * @return $this
+	 */
+	function addServiceMapping($namespace);
 
 	/**
 	 * Return drive for connection to the API via REST
@@ -22,7 +31,7 @@ interface IContext {
 	 * @param string $name
 	 * @return IService
 	 */
-	function getRepository($name);
+	function getService($name);
 
 	/**
 	 * Validate the short time token
@@ -68,7 +77,7 @@ interface IContext {
 	 * @param array $entity
 	 * @return int New ID
 	 */
-	public function create($serviceName, array $entity);
+	function create($serviceName, array $entity);
 
 	/**
 	 * Update record
@@ -76,12 +85,12 @@ interface IContext {
 	 * @param array $entity
 	 * @return bool
 	 */
-	public function update($serviceName, array $entity);
+	function update($serviceName, array $entity);
 
 	/**
 	 * Delete record
 	 * @param string $uri full name with Id
 	 * @return bool
 	 */
-	public function delete($uri);
+	function delete($uri);
 }

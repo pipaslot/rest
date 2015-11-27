@@ -17,19 +17,19 @@ interface IService extends IReadOnlyService
 	 * @param IContract $entity
 	 * @return IContract
 	 */
-	public function create(IContract $entity);
+	function create(IContract $entity);
 
 	/**
 	 * Update record by entity
 	 * @param IContract $entity
 	 * @return bool
 	 */
-	public function update(IContract $entity);
+	function update(IContract $entity);
 
 	/**
 	 * Delete record by entity
 	 * @param IContract $entity
 	 * @return bool
 	 */
-	public function delete(IContract $entity);
+	function delete(IContract $entity);
 }

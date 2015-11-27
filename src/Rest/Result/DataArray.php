@@ -3,7 +3,7 @@
 namespace Pipas\Rest\Result;
 
 /**
- * Pole pro iteraci nad objekty
+ * Array used for iterations under objects
  *
  * @author Petr Štipek <p.stipek@email.cz>
  */
@@ -18,7 +18,7 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Najde záznam podle Id klíče
+	 * Looks for record by Id keys
      * @param int $id
      * @return DataHash|null
      */
@@ -28,10 +28,10 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Seřadí prvky podle specifického sloupce položek
+	 * Sort by column name
      * @param mixed $column
-     * @param bool $ascending Vzestupné řazení
-     * @return bool Informace, zda řazení proběhlo v pořádku
+	 * @param bool $ascending
+	 * @return bool    Information about the sort of success
      */
     public function sortBy($column, $ascending = true)
     {
@@ -46,9 +46,9 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Vrátí asociativní pole klíče a hodnoty pro selectList
-     * @param string|array $valueProperty - název vlastnosti, která se má vypsat jako hodnota, nebo pole vlastností které se mají zobrazit v zadaném pořadí s aplikovaným formátem
-     * @param string $format - Formát pro vsprint, který říká jak se zadané $valueProperty budou skládat do stringu
+	 * Returns associative array for form select list
+	 * @param string|array $valueProperty Property name, which is to list as a value, or an array of properties that are to appear in the specified order with the applied format
+	 * @param string $format The format for function vsprint, which said how to compose properties
      * @return array
      */
     public function toList($valueProperty = 'name', $format = '%s')
@@ -61,7 +61,7 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
             foreach ($props as $key => $propName) {
                 $values[$key] = $row[$propName];
             }
-            $select[$row->id] = vsprintf($format, $values);
+			$select[(string)$row->id] = vsprintf($format, $values);
         }
         return $select;
     }
@@ -93,19 +93,21 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->data;
     }
 
-    /**
-     * Returns a item.
-     * @return mixed
-     */
+	/**
+	 * Returns a item.
+	 * @param mixed $offset
+	 * @return mixed
+	 */
     public function offsetExists($offset)
     {
         return isset($this->data[$offset]);
     }
 
-    /**
-     * Returns a item.
-     * @return mixed
-     */
+	/**
+	 * Returns a item.
+	 * @param mixed $offset
+	 * @return mixed
+	 */
     public function offsetGet($offset)
     {
         return $this->data[$offset];
@@ -116,10 +118,10 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
         $this->data[$offset] = $value;
     }
 
-    /**
-     * Removes the element from this list.
-     * @return void
-     */
+	/**
+	 * Removes the element from this list.
+	 * @param mixed $offset
+	 */
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);

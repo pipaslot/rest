@@ -3,7 +3,8 @@
 namespace Pipas\Rest;
 
 /**
- * Vyjímka sloužící jako oznámení o pádu, jež by měli vývojáři vyřešit a vhodně ošetřit. Nepoporučuje se ji zachytávat za běhu programu.
+ * Exception serving as the announcement of the fall, which should solve the developers and appropriately treated.
+ * Not recommended to capture at runtime.
  *
  * @author Petr Štipek <p.stipek@email.cz>
  */
@@ -15,13 +16,13 @@ class CurlException extends \Exception
     private $options;
     private $response;
 
-    public function __construct($message, array $options, array $curlinfo, $response = null)
+	public function __construct($message, array $options, array $curlInfo, $response = null)
     {
         $this->message = $message;
-        $this->url = $curlinfo['url'];
+		$this->url = $curlInfo['url'];
         $this->setOptions($options);
         $this->setResponse($response);
-        $this->info = $curlinfo;
+		$this->info = $curlInfo;
     }
 
     function getInfo()
@@ -70,7 +71,8 @@ class CurlException extends \Exception
     }
 
     /**
-     * Přeloží klíče pro nastavení CURL voleb z hodnot konstant do názvu konstant aby se volby daly číst lidmi
+	 * Translates keys for CURL configuration from constant's values to name of constant.
+	 * It's designed to simplify readability to search for errors
      * @param array $options
      * @return array
      */

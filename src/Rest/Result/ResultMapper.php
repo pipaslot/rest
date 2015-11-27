@@ -41,10 +41,10 @@ class ResultMapper
 	}
 
 	/**
-	 * @param array $data
+	 * @param array|null $data
 	 * @param int $totalCount
 	 * @param $classType
-	 * @return DataSet
+	 * @return DataSet|null
 	 */
 	public function mapDataSet($data, $totalCount = 0, $classType = DataSet::class)
 	{
@@ -57,7 +57,7 @@ class ResultMapper
 	}
 
 	/**
-	 * @param array|DataArray|DataHash $data
+	 * @param array|DataArray|DataHash|null $data
 	 * @param IReadOnlyService $repository
 	 * @param $classType
 	 * @return Contract
@@ -73,7 +73,8 @@ class ResultMapper
 	/**
 	 * @param DataHash|null $dataHash
 	 * @param IReadOnlyService|null $repository
-	 * @return Contract
+	 * @param string $classType
+	 * @return Contract|null
 	 */
 	public function convertDataHashToEntity(DataHash $dataHash = null, IReadOnlyService $repository = null, $classType = Contract::class)
 	{
@@ -88,7 +89,8 @@ class ResultMapper
 	/**
 	 * @param DataSet|null $dataSet
 	 * @param IReadOnlyService|null $repository
-	 * @return Contract
+	 * @param string $classType
+	 * @return Contract|null
 	 */
 	public function convertDataSetToEntitySet(DataSet $dataSet = null, IReadOnlyService $repository = null, $classType = Contract::class)
 	{
@@ -141,6 +143,7 @@ class ResultMapper
 	 */
 	protected function mapDataArray($data, $classType = DataArray::class)
 	{
+		/** @var DataArray $obj */
 		$obj = new $classType();
 		foreach ($data as $key => $value) {
 			if (is_array($value)) {
@@ -188,27 +191,27 @@ class ResultMapper
 	{
 		if (!isset($annotations[$type])) return;
 		foreach ($annotations[$type] as $val) {
-			$trimed = trim(preg_replace('!\s+!', ' ', $val));//Replace multiple whitespaces
-			$cname = strstr($trimed, ' ', true);
+			$trimmed = trim(preg_replace('!\s+!', ' ', $val));//Replace multiple whitespaces
+			$className = strstr($trimmed, ' ', true);
 			//Try find full name of existing class
-			if (!class_exists($cname)) {
-				$cname = $ref->getNamespaceName() . '\\' . trim($cname, '\\');
-				if (!class_exists($cname)) continue;
+			if (!class_exists($className)) {
+				$className = $ref->getNamespaceName() . '\\' . trim($className, '\\');
+				if (!class_exists($className)) continue;
 			}
-			$parents = class_parents($cname);
-			if ($cname != DataHash::class AND (!$parents OR !in_array(DataHash::class, $parents))) {
-				throw RestException::notInheritedForm($cname, DataHash::class);
+			$parents = class_parents($className);
+			if ($className != DataHash::class AND (!$parents OR !in_array(DataHash::class, $parents))) {
+				throw RestException::notInheritedForm($className, DataHash::class);
 			}
 
-			$prop = strstr($trimed, '$');
+			$prop = strstr($trimmed, '$');
 			$pos = strpos($prop, ' ');
-			$pname = $pos != false ? substr($prop, 1, $pos - 1) : substr($prop, 1);
+			$propertyName = $pos != false ? substr($prop, 1, $pos - 1) : substr($prop, 1);
 
-			$property = $this->getClassPropertyByName($ref, $pname);
+			$property = $this->getClassPropertyByName($ref, $propertyName);
 			if ($property AND !$property->protected) {
-				throw RestException::notProtectedProperty($ref->getName(), $pname);
+				throw RestException::notProtectedProperty($ref->getName(), $propertyName);
 			}
-			$this->classProperties[$ref->getName()][$pname] = $cname;
+			$this->classProperties[$ref->getName()][$propertyName] = $className;
 		}
 	}
 

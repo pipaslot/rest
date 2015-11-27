@@ -5,16 +5,16 @@ namespace Pipas\Rest;
 use OutOfRangeException;
 
 /**
- * Pomocné funkce pro REST nástroje
+ * Auxiliary functions for REST tools
  *
  * @author Petr Štipek <p.stipek@email.cz>
  */
 class Helpers {
 
 	/**
-	 * Převede hodnotu na boolean false/true, popřípadně 0/1, nebo "false"/"true"
-	 * @param type $value
-	 * @throws OutOfRangeException V případě že nelze hodnotu rozpoznat
+	 * Converts value to boolean false/true, or 0/1, or "false"/"true"
+	 * @param mixed $value
+	 * @throws OutOfRangeException In the event that the value can not recognize
 	 * @return bool
 	 */
 	public static function toBoolean($value)

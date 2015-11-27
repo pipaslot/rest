@@ -30,10 +30,11 @@ class Contract extends DataHash implements IContract
     }
 
     /**
-     * Vytvoří konkrétní objekt z abstraktnějšího DataHash objektu, pokud se předá jako null, nezkončí program chybu ale vrátí také null hodnotu
-	 * @param \Pipas\Rest\Result\DataHash $dataHash
+	 *
+	 * Creates a specific object from the more abstract DataHash object if it passes a null, not end the program error but also returns a null value
+	 * @param DataHash $dataHash
      * @param IReadOnlyService $repository
-     * @return \static
+	 * @return Contract|null
      */
     public static function fromDataHash(DataHash $dataHash = null, IReadOnlyService $repository = null)
     {
