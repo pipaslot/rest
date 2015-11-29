@@ -46,7 +46,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	{
 		$class = get_called_class();
 		$slashPos = strrpos($class, "\\");
-		$className = substr($class, $slashPos);
+		$className = trim(substr($class, $slashPos), "\\");
 		if (Strings::endsWith($className, self::NAME_SUFFIX)) {
 			$className = substr($className, 0, strlen($className) - strlen(self::NAME_SUFFIX));
 		}
