@@ -1,0 +1,33 @@
+<?php
+
+namespace Pipas\Rest\Debug;
+
+?>
+
+<h1>REST comunication</h1>
+<div class="nette-inner">
+	<table>
+		<thead>
+		<tr>
+			<th>Type</th>
+			<th>Time (ms)</th>
+			<th>URL</th>
+			<th>Parameters</th>
+			<th>Response</th>
+		</tr>
+		</thead>
+		<tbody>
+		<?php
+		foreach (Logger::getList() as $log) {
+			echo "<tr>
+				<td>" . $log->getType() . "</td>
+				<td>" . number_format($log->getTimeDelta() * 1000, 6) . "</td>
+				<td>" . $log->getUrl() . "</td>
+				<td>" . $log->getParamsAsHtml() . "</td>
+				<td>" . $log->getResultAsHtml() . "</td>
+			</tr>";
+		}
+		?>
+		</tbody>
+	</table>
+</div>
