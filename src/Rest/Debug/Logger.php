@@ -2,6 +2,7 @@
 
 
 namespace Pipas\Rest\Debug;
+use Nette\Http\Url;
 
 /**
  * @author Petr Štipek <p.stipek@email.cz>
@@ -12,46 +13,44 @@ class Logger
 
 	/**
 	 * Logs POST request
-	 * @param $url
-	 * @param array $params
+	 * @param Url $url
+	 * @param array $data
 	 * @return Log
 	 */
-	public static function startPost($url, array $params = array())
+	public static function startPost(Url $url, array $data = array())
 	{
-		return self::$logs[] = new Log(Log::POST, $url, $params);
+		return self::$logs[] = new Log(Log::POST, $url, $data);
 	}
 
 	/**
 	 * Logs PUT request
-	 * @param $url
-	 * @param array $params
+	 * @param Url $url
+	 * @param array $data
 	 * @return Log
 	 */
-	public static function startPut($url, array $params = array())
+	public static function startPut(Url $url, array $data = array())
 	{
-		return self::$logs[] = new Log(Log::PUT, $url, $params);
+		return self::$logs[] = new Log(Log::PUT, $url, $data);
 	}
 
 	/**
 	 * Logs GET request
-	 * @param $url
-	 * @param array $params
+	 * @param Url $url
 	 * @return Log
 	 */
-	public static function startGet($url, array $params = array())
+	public static function startGet(Url $url)
 	{
-		return self::$logs[] = new Log(Log::GET, $url, $params);
+		return self::$logs[] = new Log(Log::GET, $url);
 	}
 
 	/**
 	 * Logs DELETE request
-	 * @param $url
-	 * @param array $params
+	 * @param Url $url
 	 * @return Log
 	 */
-	public static function startDelete($url, array $params = array())
+	public static function startDelete($url)
 	{
-		return self::$logs[] = new Log(Log::DELETE, $url, $params);
+		return self::$logs[] = new Log(Log::DELETE, $url);
 	}
 
 	/**

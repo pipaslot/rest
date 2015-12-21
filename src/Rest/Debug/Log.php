@@ -3,6 +3,7 @@
 
 namespace Pipas\Rest\Debug;
 
+use Nette\Http\Url;
 use Nette\Object;
 use Tracy\Dumper;
 
@@ -25,15 +26,19 @@ class Log extends Object
 
 	/**
 	 * Create log ans start timing
-	 * @param $type
-	 * @param $url
-	 * @param $params
+	 * @param string $type
+	 * @param Url|string $url
+	 * @param array $params
 	 */
-	public function __construct($type, $url, $params = null)
+	public function __construct($type, $url, array $params = null)
 	{
 		$this->type = $type;
-		$this->url = $url;
 		$this->params = $params;
+		if ($url instanceof Url) {
+			$this->params = $url->queryParameters;
+			$url->setQuery("");
+		}
+		$this->url = (string)$url;
 		$this->start = microtime(true);
 	}
 
