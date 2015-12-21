@@ -37,7 +37,7 @@ class DataSetTest extends TestCase
 
 	function setUp()
 	{
-		$mapper = new ResultMapper();
+		$mapper = ResultMapper::create();
 		$this->set = $mapper->mapDataSet($this->data, self::TOTAL_COUNT);
 	}
 

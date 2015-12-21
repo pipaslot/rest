@@ -14,19 +14,18 @@ use Pipas\Rest\Result\ResultMapper;
  */
 abstract class AReadOnlyService implements IReadOnlyService
 {
-	/**
-	 * @var IContext
-	 */
+	/** @var IContext */
 	protected $context;
-	/**
-	 * @var ResultMapper
-	 */
+	/** @var ResultMapper */
 	protected $resultMapper;
+	/** @var IDriver */
+	protected $driver;
 
 	function __construct(IContext $context)
 	{
 		$this->context = $context;
-		$this->resultMapper = ResultMapper::get();
+		$this->resultMapper = ResultMapper::create();
+		$this->driver = $context->getDriver();
 	}
 
 	/**
@@ -66,7 +65,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function find($id)
 	{
-		return $this->resultMapper->mapEntity($this->context->find($this->getName(), $id), $this, $this->getContractName());
+		return $this->resultMapper->mapEntity($this->driver->find($this->getName(), $id), $this, $this->getContractName());
 	}
 
 	/**
@@ -75,7 +74,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function findAll()
 	{
-		return $this->resultMapper->convertDataSetToEntitySet($this->context->findAll($this->getName()), $this, $this->getContractName());
+		return $this->resultMapper->convertDataSetToEntitySet($this->driver->findAll($this->getName()), $this, $this->getContractName());
 	}
 
 	/**
@@ -85,7 +84,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function findBy(array $query)
 	{
-		return $this->resultMapper->convertDataSetToEntitySet($this->context->findBy($this->getName(), $query), $this, $this->getContractName());
+		return $this->resultMapper->convertDataSetToEntitySet($this->driver->findBy($this->getName(), $query), $this, $this->getContractName());
 	}
 
 	/**
@@ -95,7 +94,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function findOneBy(array $query = array())
 	{
-		return $this->resultMapper->mapEntity($this->context->findOneBy($this->getName(), $query), $this, $this->getContractName());
+		return $this->resultMapper->mapEntity($this->driver->findOneBy($this->getName(), $query), $this, $this->getContractName());
 	}
 
 }

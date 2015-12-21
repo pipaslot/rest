@@ -28,7 +28,7 @@ class RestPanel extends Object implements IBarPanel
 	 */
 	function getPanel()
 	{
-		if (count(Logger::getList()) == 0) return;
+		if (count(Logger::getList()) == 0) return null;
 		ob_start();
 		require __DIR__ . "/assets/panel.phtml";
 		return ob_get_clean();

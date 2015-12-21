@@ -36,7 +36,7 @@ class DataArrayTest extends TestCase
 
 	function setUp()
 	{
-		$mapper = new ResultMapper();
+		$mapper = ResultMapper::create();
 		$this->array = $mapper->mapData($this->data);
 	}
 

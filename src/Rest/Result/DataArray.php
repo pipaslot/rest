@@ -48,7 +48,7 @@ class DataArray implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
 	 * Returns associative array for form select list
 	 * @param string|array $valueProperty Property name, which is to list as a value, or an array of properties that are to appear in the specified order with the applied format
-	 * @param string $format The format for function vsprint, which said how to compose properties
+	 * @param string $format The format for function vsprintf, which said how to compose properties
      * @return array
      */
     public function toList($valueProperty = 'name', $format = '%s')

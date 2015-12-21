@@ -25,7 +25,7 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
     public function initializeProperty($propertyName, $value, $defaultObjectType = DataHash::class)
     {
 		if (in_array($propertyName, $this->_initializedProperties)) return false;
-        $this->$propertyName = ResultMapper::get()->mapData($value, $defaultObjectType);
+		$this->$propertyName = ResultMapper::create()->mapData($value, $defaultObjectType);
 		$this->_initializedProperties[] = $propertyName;
         return true;
     }
@@ -143,7 +143,7 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
     public function __get($name)
     {
         $method = 'get' . ucfirst($name);
-        $list = ResultMapper::get()->getAnnotatedProperties(get_class($this));
+		$list = ResultMapper::create()->getAnnotatedProperties(get_class($this));
         if (isset($list[$name])) {
             $this->initializeProperty($name, array(), $list[$name]);
         }

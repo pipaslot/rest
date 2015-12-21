@@ -64,8 +64,8 @@ class ResultMapperTestTest extends TestCase
 
 	public function test_staticConstructor()
 	{
-		$ins1 = ResultMapper::get();
-		Assert::same($ins1, ResultMapper::get());
+		$ins1 = ResultMapper::create();
+		Assert::same($ins1, ResultMapper::create());
 	}
 
 	/************** mapData **************/

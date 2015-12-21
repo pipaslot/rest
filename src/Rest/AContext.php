@@ -2,39 +2,36 @@
 
 namespace Pipas\Rest;
 
-use Nette\Caching\Cache;
-use Nette\Caching\IStorage;
-use Pipas\Rest\Result\ResultMapper;
+use Nette\Object;
 
 /**
  * Basic context for connection to API
  *
  * @author Petr Stipek <p.stipek@email.cz>
+ *
+ * @property-read IDriver $driver
  */
-abstract class AContext implements IContext
+abstract class AContext extends Object implements IContext
 {
 	/** @var array Service mapping */
 	private $mappings = array();
 	private $services = array();
 
-	/**
-	 * @var Cache
-	 */
-	protected $cache;
-
-	/**
-	 * @var IConnection
-	 */
+	/** @var IDriver */
 	protected $driver;
 
-	/** @var  ResultMapper */
-	protected $resultMapper;
-
-	function __construct(IConnection $driver, IStorage $cacheStorage)
+	function __construct(IDriver $driver)
 	{
 		$this->driver = $driver;
-		$this->cache = new Cache($cacheStorage, get_called_class());
-		$this->resultMapper = ResultMapper::get();
+	}
+
+	/**
+	 * Return drive for connection to the API via REST
+	 * @return IDriver
+	 */
+	public function getDriver()
+	{
+		return $this->driver;
 	}
 
 	/**
@@ -51,18 +48,8 @@ abstract class AContext implements IContext
 		return $this;
 	}
 
-
 	/**
-	 * Return drive for connection to the API via REST
-	 * @return IConnection
-	 */
-	public function getDriver()
-	{
-		return $this->driver;
-	}
-
-	/**
-	 *
+	 * Returns instance of repository under this context
 	 * @param string $name
 	 * @return IService
 	 */

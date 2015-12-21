@@ -21,7 +21,7 @@ abstract class AService extends AReadOnlyService implements IService
 	{
 		$arr = $entity->toArrayForCreate();
 		if (isset($arr['id'])) unset($arr['id']);
-		$entity->setId($this->context->create($this->getName(), $arr));
+		$entity->setId($this->driver->create($this->getName(), $arr));
 		return $entity;
 	}
 
@@ -36,7 +36,7 @@ abstract class AService extends AReadOnlyService implements IService
 		if (!$entity->getId()) throw new RestException("Missing entity ID");
 		$arr = $entity->toArrayForUpdate();
 		if (isset($arr['id'])) unset($arr['id']);
-		return $this->context->update($this->getName() . '/' . $entity->getId(), $arr);
+		return $this->driver->update($this->getName() . '/' . $entity->getId(), $arr);
 	}
 
 	/**
@@ -48,7 +48,7 @@ abstract class AService extends AReadOnlyService implements IService
 	public function delete(IContract $entity)
 	{
 		if (!$entity->getId()) throw new RestException("Missing entity ID");
-		return $this->context->delete($this->getName() . '/' . $entity->getId());
+		return $this->driver->delete($this->getName() . '/' . $entity->getId());
 	}
 
 }

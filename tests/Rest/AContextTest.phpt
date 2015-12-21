@@ -1,9 +1,8 @@
 <?php
 
-use Nette\Caching\IStorage;
 use Pipas\Rest\AContext;
 use Pipas\Rest\AService;
-use Pipas\Rest\IConnection;
+use Pipas\Rest\IDriver;
 use Pipas\Rest\Result\Contract;
 use Tester\Assert;
 use Tester\TestCase;
@@ -12,47 +11,10 @@ require __DIR__ . '/../bootstrap.php';
 
 class FakeContext extends AContext
 {
-
-	public function find($serviceName, $id)
-	{
-
-	}
-
-	public function findAll($serviceName)
-	{
-
-	}
-
-	public function findBy($serviceName, array $query)
-	{
-
-	}
-
-	public function findOneBy($serviceName, array $query = array())
-	{
-
-	}
-
 	public function validateToken($token)
 	{
 
 	}
-
-	public function create($serviceName, array $entity)
-	{
-
-	}
-
-	public function delete($uri)
-	{
-
-	}
-
-	public function update($serviceName, array $entity)
-	{
-
-	}
-
 }
 
 class FakeCompanyService extends AService
@@ -66,28 +28,24 @@ class FakeCompanyService extends AService
 class AContextTest extends TestCase
 {
 
-	/** @var Mockery\MockInterface|IConnection */
+	/** @var Mockery\MockInterface|IDriver */
 	private $driver;
-
-	/** @var Mockery\MockInterface|IStorage */
-	private $storage;
 
 	function setUp()
 	{
 		parent::setUp();
-		$this->driver = Mockery::mock(IConnection::class);
-		$this->storage = Mockery::mock(IStorage::class);
+		$this->driver = Mockery::mock(IDriver::class);
 	}
 
 	function test_getDriver()
 	{
-		$context = new FakeContext($this->driver, $this->storage);
+		$context = new FakeContext($this->driver);
 		Assert::equal($this->driver, $context->getDriver());
 	}
 
 	function test_addMapping()
 	{
-		$context = new FakeContext($this->driver, $this->storage);
+		$context = new FakeContext($this->driver);
 		Assert::exception(function () use ($context) {
 			$context->addServiceMapping("WithougCross");
 		}, \OutOfRangeException::class);
@@ -103,7 +61,7 @@ class AContextTest extends TestCase
 
 	function test_getService()
 	{
-		$context = new FakeContext($this->driver, $this->storage);
+		$context = new FakeContext($this->driver);
 
 		//Mapping is not setup
 		Assert::exception(function () use ($context) {

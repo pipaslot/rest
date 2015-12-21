@@ -8,21 +8,25 @@ use Pipas\Rest\RestException;
 
 /**
  * Class ResultMapper mapping array data to objects
- * @package Pipas\Rest\Result
+ * @author Petr Štipek <p.stipek@email.cz>
  */
-class ResultMapper
+class ResultMapper implements IResultMapper
 {
 	private static $instance;
 
 	/**
 	 * @return ResultMapper
 	 */
-	public static function get()
+	public static function create()
 	{
 		if (!self::$instance) {
 			self::$instance = new static();
 		}
 		return self::$instance;
+	}
+
+	protected function __construct()
+	{
 	}
 
 	/** @var array List of properties defined in annotations */

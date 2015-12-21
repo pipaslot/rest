@@ -5,6 +5,7 @@ namespace Pipas\Rest;
 
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
+use Pipas\Rest\Result\IResultMapper;
 use Pipas\Rest\Result\ResultMapper;
 
 /**
@@ -22,13 +23,14 @@ abstract class ADriver implements IDriver
 	/**
 	 * ADriver constructor.
 	 * @param IConnection $connection
+	 * @param IResultMapper $resultMapper
 	 * @param IStorage $storage
 	 */
-	public function __construct(IConnection $connection, IStorage $storage)
+	public function __construct(IConnection $connection, IResultMapper $resultMapper, IStorage $storage)
 	{
 		$this->connection = $connection;
 		$this->cache = new Cache($storage, get_called_class());
-		$this->resultMapper = ResultMapper::get();
+		$this->resultMapper = $resultMapper;
 	}
 
 	/**

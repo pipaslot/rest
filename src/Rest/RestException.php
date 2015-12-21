@@ -31,9 +31,9 @@ class RestException extends \Exception
 	 * @param string $url
 	 * @return RestException
 	 */
-    public static function resultSetNotSuccesfullyLoaded($url)
+	public static function resultSetNotSuccessfullyLoaded($url)
     {
-		return new self("Can not successfuly load data from query to: " . $url, self::CODE_RESULT_SET_NOT_SUCCESSFULLY_LOADED);
+		return new self("Can not successfully load data from query to: " . $url, self::CODE_RESULT_SET_NOT_SUCCESSFULLY_LOADED);
     }
 
 	/**
