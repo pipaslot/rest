@@ -21,7 +21,7 @@ namespace Pipas\Rest\Debug;
 		foreach (Logger::getList() as $log) {
 			echo "<tr>
 				<td>" . $log->getType() . "</td>
-				<td>" . number_format($log->getTimeDelta() * 1000, 6) . "</td>
+				<td>" . number_format($log->getTimeDelta() * 1000, 0, ".", " ") . "</td>
 				<td>" . $log->getUrl() . "</td>
 				<td>" . $log->getParamsAsHtml() . "</td>
 				<td>" . $log->getResultAsHtml() . "</td>
