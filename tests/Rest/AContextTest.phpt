@@ -3,7 +3,7 @@
 use Nette\Caching\IStorage;
 use Pipas\Rest\AContext;
 use Pipas\Rest\AService;
-use Pipas\Rest\IDriver;
+use Pipas\Rest\IConnection;
 use Pipas\Rest\Result\Contract;
 use Tester\Assert;
 use Tester\TestCase;
@@ -66,7 +66,7 @@ class FakeCompanyService extends AService
 class AContextTest extends TestCase
 {
 
-	/** @var Mockery\MockInterface|IDriver */
+	/** @var Mockery\MockInterface|IConnection */
 	private $driver;
 
 	/** @var Mockery\MockInterface|IStorage */
@@ -75,7 +75,7 @@ class AContextTest extends TestCase
 	function setUp()
 	{
 		parent::setUp();
-		$this->driver = Mockery::mock(IDriver::class);
+		$this->driver = Mockery::mock(IConnection::class);
 		$this->storage = Mockery::mock(IStorage::class);
 	}
 

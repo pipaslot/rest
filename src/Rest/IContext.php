@@ -22,7 +22,7 @@ interface IContext
 
 	/**
 	 * Return drive for connection to the API via REST
-	 * @return IDriver
+	 * @return IConnection
 	 */
 	function getDriver();
 

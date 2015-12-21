@@ -3,8 +3,8 @@
 use Nette\Caching\IStorage;
 use Pipas\Rest\AContext;
 use Pipas\Rest\AService;
+use Pipas\Rest\IConnection;
 use Pipas\Rest\IContext;
-use Pipas\Rest\IDriver;
 use Pipas\Rest\RestException;
 use Pipas\Rest\Result\Contract;
 use Tester\Assert;
@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 class FakeContext extends AContext
 {
 
-	function __construct(IDriver $driver, IStorage $cacheStorage)
+	function __construct(IConnection $driver, IStorage $cacheStorage)
 	{
 		parent::__construct($driver, $cacheStorage);
 		$this->addServiceMapping("*Service");

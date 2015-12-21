@@ -23,14 +23,14 @@ abstract class AContext implements IContext
 	protected $cache;
 
 	/**
-	 * @var IDriver
+	 * @var IConnection
 	 */
 	protected $driver;
 
 	/** @var  ResultMapper */
 	protected $resultMapper;
 
-	function __construct(IDriver $driver, IStorage $cacheStorage)
+	function __construct(IConnection $driver, IStorage $cacheStorage)
 	{
 		$this->driver = $driver;
 		$this->cache = new Cache($cacheStorage, get_called_class());
@@ -54,7 +54,7 @@ abstract class AContext implements IContext
 
 	/**
 	 * Return drive for connection to the API via REST
-	 * @return IDriver
+	 * @return IConnection
 	 */
 	public function getDriver()
 	{
