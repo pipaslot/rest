@@ -2,56 +2,74 @@
 
 namespace Pipas\Rest;
 
+use Pipas\Rest\Result\DataHash;
+use Pipas\Rest\Result\DataSet;
+
 /**
- * Class to control communication between the application and the REST API
- *
+ * Realise commands though connection object
  * @author Petr Štipek <p.stipek@email.cz>
  */
 interface IDriver
 {
+	/**
+	 * REST connection
+	 * @return IConnection
+	 */
+	function getConnection();
 
 	/**
-	 * Send GET request to receive the data
-	 * @param string $uri
+	 * Find one by ID
+	 * @param string $serviceName
+	 * @param $id
+	 * @return DataHash|null
+	 */
+	function find($serviceName, $id);
+
+	/**
+	 * Returns all available records
+	 * @param string $serviceName
+	 * @return DataSet
+	 */
+	function findAll($serviceName);
+
+	/**
+	 * Returns all available records filtered by query
+	 * @param string $serviceName
 	 * @param array $query
-	 * @return mixed
+	 * @return DataSet
 	 */
-	function sendGet($uri, $query = array());
+	function findBy($serviceName, array $query);
 
 	/**
-	 * Update record by POST request
-	 * @param string $uri
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	function sendPost($uri, array $data);
-
-	/**
-	 * Create new record by PUT request
-	 * @param string $uri
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	function sendPut($uri, array $data);
-
-	/**
-	 * Delete data by DELETE request
-	 * @param string $uri
-	 * @return mixed
-	 */
-	function sendDelete($uri);
-
-	/**
-	 * Constructing URL for API communication
-	 * @param string $service
+	 * Returns the first from available records filtered by query
+	 * @param string $serviceName
 	 * @param array $query
-	 * @return string
+	 * @return DataHash|null
 	 */
-	function buildUri($service, $query = array());
+	function findOneBy($serviceName, array $query = array());
 
 	/**
-	 * Check if the connection is working
+	 * Create new record
+	 * @param string $serviceName
+	 * @param array $entity
+	 * @return int New ID
+	 */
+	function create($serviceName, array $entity);
+
+	/**
+	 * Update record
+	 * @param string $serviceName
+	 * @param array $entity
 	 * @return bool
 	 */
-	function checkConnection();
+	function update($serviceName, array $entity);
+
+	/**
+	 * Delete record
+	 * @param string $serviceName full name with Id
+	 * @param array $query
+	 * @return bool
+	 */
+	function delete($serviceName, array $query = array());
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Pipas\Rest;
+
 use Nette\Http\Url;
 
 /**
@@ -10,46 +11,40 @@ use Nette\Http\Url;
  */
 interface IConnection
 {
+	/**
+	 * @return Configuration
+	 */
+	function getConfiguration();
 
 	/**
 	 * Send GET request to receive the data
-	 * @param string $path Path to service
-	 * @param array $query
+	 * @param Url $url
 	 * @return mixed
 	 */
-	function sendGet($path, $query = array());
+	function sendGet(Url $url);
 
 	/**
 	 * Update record by POST request
-	 * @param string $path Path to service
+	 * @param Url $url
 	 * @param mixed $data
 	 * @return mixed
 	 */
-	function sendPost($path, array $data);
+	function sendPost(Url $url, array $data);
 
 	/**
 	 * Create new record by PUT request
-	 * @param string $path Path to service
+	 * @param Url $url
 	 * @param mixed $data
 	 * @return mixed
 	 */
-	function sendPut($path, array $data);
+	function sendPut(Url $url, array $data);
 
 	/**
 	 * Delete data by DELETE request
-	 * @param string $path Path to service
-	 * @param array $query
+	 * @param Url $url
 	 * @return mixed
 	 */
-	function sendDelete($path, $query = array());
-
-	/**
-	 * Constructing URL for API communication
-	 * @param string $path Path to service
-	 * @param array $query
-	 * @return Url
-	 */
-	function buildUrl($path, $query = array());
+	function sendDelete(Url $url);
 
 	/**
 	 * Check if the connection is working
