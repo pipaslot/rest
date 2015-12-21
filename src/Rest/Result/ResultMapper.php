@@ -14,6 +14,9 @@ class ResultMapper
 {
 	private static $instance;
 
+	/**
+	 * @return ResultMapper
+	 */
 	public static function get()
 	{
 		if (!self::$instance) {
