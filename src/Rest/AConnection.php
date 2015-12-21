@@ -9,7 +9,7 @@ namespace Pipas\Rest;
 abstract class AConnection implements IConnection
 {
 	/** @var Configuration */
-	private $configuration;
+	protected $configuration;
 
 	/**
 	 * AConnection constructor.

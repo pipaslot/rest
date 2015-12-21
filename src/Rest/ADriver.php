@@ -14,7 +14,7 @@ use Pipas\Rest\Result\ResultMapper;
 abstract class ADriver implements IDriver
 {
 	/** @var IConnection */
-	private $connection;
+	protected $connection;
 	/** @var Cache */
 	protected $cache;
 	/** @var ResultMapper */
