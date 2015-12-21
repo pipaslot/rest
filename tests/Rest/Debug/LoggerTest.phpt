@@ -7,7 +7,6 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-//Description
 test(function () {
 
 	$list[] = $log1 = Logger::startGet(new Url("url"));

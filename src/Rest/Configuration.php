@@ -36,6 +36,7 @@ class Configuration
 		$this->username = $username;
 		$this->password = $password;
 		$this->url = new Url($url);
+		if (empty($this->url->scheme)) $this->url->scheme = 'http';
 	}
 
 	/**
