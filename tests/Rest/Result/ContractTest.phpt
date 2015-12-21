@@ -16,14 +16,22 @@ require __DIR__ . '/../../bootstrap.php';
 class ContractTest extends TestCase
 {
 
-	function test_repository()
+	function test_service()
 	{
-		$repository = Mockery::mock(IReadOnlyService::class);
-		$entity = new FakeContract($repository);
+		$service = Mockery::mock(IReadOnlyService::class);
+		$entity = new FakeContract($service);
 
-		Assert::same($repository, $entity->getService());
+		Assert::same($service, $entity->getService());
 		$entity->setService(null);
 		Assert::null($entity->getService());
+	}
+
+	function test_primaryKey()
+	{
+		$id = 1234;
+		$entity = new FakeContract();
+		$entity->setId($id);
+		Assert::equal($id, $entity->getId());
 	}
 
 	function test_serialization()

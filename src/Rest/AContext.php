@@ -51,9 +51,10 @@ abstract class AContext extends Object implements IContext
 	/**
 	 * Returns instance of repository under this context
 	 * @param string $name
-	 * @return IService
+	 * @param bool $need
+	 * @return IService|null
 	 */
-	public function getService($name)
+	public function getService($name, $need = true)
 	{
 		if (!isset($this->services[$name])) {
 			$attempts = array();
@@ -65,15 +66,23 @@ abstract class AContext extends Object implements IContext
 					break;
 				}
 			}
-			if (empty($this->services[$name])) throw new \OutOfRangeException("Cannot load service with name:'$name' from choices[" . implode(', ', $attempts) . "]. Please check if you have correctly setup mapping");
+			if (empty($this->services[$name])) {
+				if ($need) throw new \OutOfRangeException("Cannot load service with name:'$name' from choices[" . implode(', ', $attempts) . "]. Please check if you have correctly setup mapping");
+				else return null;
+			}
 		}
 		return $this->services[$name];
 	}
 
 
-	public function __get($name)
+	public function &__get($name)
 	{
-		return $this->getService($name);
+		$service = $this->getService($name, false);
+		if ($service) {
+			return $service;
+		}
+		$object = parent::__get($name);
+		return $object;
 	}
 
 }

@@ -9,11 +9,31 @@ use Tester\TestCase;
 
 require __DIR__ . '/../bootstrap.php';
 
+/**
+ * Class FakeContext
+ * @author Petr Štipek <p.stipek@email.cz>
+ * @property bool $magicProperty
+ */
 class FakeContext extends AContext
 {
+
+	/**
+	 * FakeContext constructor.
+	 */
+	public function __construct(IDriver $driver)
+	{
+		parent::__construct($driver);
+		$this->addServiceMapping("Fake*Service");
+	}
+
 	public function validateToken($token)
 	{
 
+	}
+
+	public function getMagicProperty()
+	{
+		return true;
 	}
 }
 
@@ -64,6 +84,8 @@ class AContextTest extends TestCase
 		$context = new FakeContext($this->driver);
 
 		//Mapping is not setup
+
+		Assert::true($context->getService("fakeCompany", false) === null);
 		Assert::exception(function () use ($context) {
 			$context->getService("fakeCompany");
 		}, \OutOfRangeException::class);
@@ -79,6 +101,16 @@ class AContextTest extends TestCase
 		$rep3 = $context->fakeCompany;
 		Assert::same($rep, $rep3);
 
+
+	}
+
+	function test_magic_get()
+	{
+		$context = new FakeContext($this->driver);
+		Assert::equal($context->getMagicProperty(), $context->magicProperty);
+
+		$companyService = $context->company;
+		Assert::true($companyService instanceof FakeCompanyService);
 	}
 
 }

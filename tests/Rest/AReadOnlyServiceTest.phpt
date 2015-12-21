@@ -25,6 +25,7 @@ namespace Tests {
 	use Pipas\Rest\AService;
 	use Pipas\Rest\IConnection;
 	use Pipas\Rest\IContext;
+	use Pipas\Rest\IDriver;
 	use Pipas\Rest\Result\Contract;
 	use Tester\Assert;
 	use Tester\TestCase;
@@ -107,14 +108,17 @@ namespace Tests {
 
 	class AReadOnlyServiceTest extends TestCase
 	{
-
 		/** @var Mockery\MockInterface|IContext */
 		private $context;
+		/** @var Mockery\MockInterface|IDriver */
+		private $driver;
 
 		function setUp()
 		{
 			parent::setUp();
+			$this->driver = Mockery::mock(IDriver::class);
 			$this->context = Mockery::mock(FakeContext::class);
+			$this->context->shouldReceive("getDriver")->andReturn($this->driver);
 		}
 
 		private function createRepository()
@@ -143,37 +147,37 @@ namespace Tests {
 		function test_find_delegateToContext()
 		{
 			$id = 1;
-			$this->context->shouldReceive("find");
+			$this->driver->shouldReceive("find");
 			$rep = $this->createRepository();
 			$rep->find($id);
-			$this->context->shouldHaveReceived("find", array(FakeService::SERVICE_NAME, $id));
+			$this->driver->shouldHaveReceived("find", array(FakeService::SERVICE_NAME, $id));
 			Assert::true(true);
 		}
 
 		function test_findAll_delegateToContext()
 		{
-			$this->context->shouldReceive("findAll");
+			$this->driver->shouldReceive("findAll");
 			$rep = $this->createRepository();
 			$rep->findAll();
-			$this->context->shouldHaveReceived("findAll", array(FakeService::SERVICE_NAME));
+			$this->driver->shouldHaveReceived("findAll", array(FakeService::SERVICE_NAME));
 		}
 
 		function test_findBy_delegateToContext()
 		{
 			$id = array("key" => "value");
-			$this->context->shouldReceive("findBy");
+			$this->driver->shouldReceive("findBy");
 			$rep = $this->createRepository();
 			$rep->findBy($id);
-			$this->context->shouldHaveReceived("findBy", array(FakeService::SERVICE_NAME, $id));
+			$this->driver->shouldHaveReceived("findBy", array(FakeService::SERVICE_NAME, $id));
 		}
 
 		function test_findOneBy_delegateToContext()
 		{
 			$id = array("key" => "value");
-			$this->context->shouldReceive("findOneBy");
+			$this->driver->shouldReceive("findOneBy");
 			$rep = $this->createRepository();
 			$rep->findOneBy($id);
-			$this->context->shouldHaveReceived("findOneBy", array(FakeService::SERVICE_NAME, $id));
+			$this->driver->shouldHaveReceived("findOneBy", array(FakeService::SERVICE_NAME, $id));
 		}
 
 	}

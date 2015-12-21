@@ -2,6 +2,7 @@
 
 
 namespace Pipas\Rest\Debug;
+
 use Nette\Http\Url;
 
 /**
@@ -59,5 +60,13 @@ class Logger
 	public static function getList()
 	{
 		return self::$logs;
+	}
+
+	/**
+	 * Remove all logs
+	 */
+	public static function clean()
+	{
+		self::$logs = array();
 	}
 }
