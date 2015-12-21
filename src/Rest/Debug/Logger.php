@@ -12,46 +12,46 @@ class Logger
 
 	/**
 	 * Logs POST request
-	 * @param $uri
+	 * @param $url
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startPost($uri, array $params = array())
+	public static function startPost($url, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::POST, $uri, $params);
+		return self::$logs[] = new Log(Log::POST, $url, $params);
 	}
 
 	/**
 	 * Logs PUT request
-	 * @param $uri
+	 * @param $url
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startPut($uri, array $params = array())
+	public static function startPut($url, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::PUT, $uri, $params);
+		return self::$logs[] = new Log(Log::PUT, $url, $params);
 	}
 
 	/**
 	 * Logs GET request
-	 * @param $uri
+	 * @param $url
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startGet($uri, array $params = array())
+	public static function startGet($url, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::GET, $uri, $params);
+		return self::$logs[] = new Log(Log::GET, $url, $params);
 	}
 
 	/**
 	 * Logs DELETE request
-	 * @param $uri
+	 * @param $url
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startDelete($uri, array $params = array())
+	public static function startDelete($url, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::DELETE, $uri, $params);
+		return self::$logs[] = new Log(Log::DELETE, $url, $params);
 	}
 
 	/**
