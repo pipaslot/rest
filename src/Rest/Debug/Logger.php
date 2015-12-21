@@ -11,59 +11,47 @@ class Logger
 	private static $logs = array();
 
 	/**
-	 * Logs POST request. Does not forget call end of measurement
-	 * @param $url
+	 * Logs POST request
+	 * @param $uri
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startPost($url, array $params = array())
+	public static function startPost($uri, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::POST, $url, $params);
+		return self::$logs[] = new Log(Log::POST, $uri, $params);
 	}
 
 	/**
-	 * Logs PUT request. Does not forget call end of measurement
-	 * @param $url
+	 * Logs PUT request
+	 * @param $uri
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startPut($url, array $params = array())
+	public static function startPut($uri, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::PUT, $url, $params);
+		return self::$logs[] = new Log(Log::PUT, $uri, $params);
 	}
 
 	/**
-	 * Logs GET request. Does not forget call end of measurement
-	 * @param $url
+	 * Logs GET request
+	 * @param $uri
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startGet($url, array $params = array())
+	public static function startGet($uri, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::GET, $url, $params);
+		return self::$logs[] = new Log(Log::GET, $uri, $params);
 	}
 
 	/**
-	 * Logs DELETE request. Does not forget call end of measurement
-	 * @param $url
+	 * Logs DELETE request
+	 * @param $uri
 	 * @param array $params
 	 * @return Log
 	 */
-	public static function startDelete($url, array $params = array())
+	public static function startDelete($uri, array $params = array())
 	{
-		return self::$logs[] = new Log(Log::DELETE, $url, $params);
-	}
-
-	/**
-	 * Stops measurement
-	 * @param Log $log
-	 * @param mixed $result
-	 * @return int time delta
-	 */
-	public static function end(Log $log, $result)
-	{
-		$log->setResult($result);
-		return $log->getTimeDelta();
+		return self::$logs[] = new Log(Log::DELETE, $uri, $params);
 	}
 
 	/**

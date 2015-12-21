@@ -38,12 +38,12 @@ class Log extends Object
 	}
 
 	/**
-	 * Set result and stop timing
-	 * @param $data
+	 * Exits the measurement and write the result
+	 * @param $result
 	 */
-	public function setResult($data = null)
+	public function end($result = null)
 	{
-		$this->result = $data;
+		$this->result = $result;
 		$this->end = microtime(true);
 	}
 
