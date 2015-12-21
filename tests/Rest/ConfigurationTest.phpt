@@ -1,6 +1,7 @@
 <?php
 
-use Pipas\Rest\Connection;
+use Nette\Http\Url;
+use Pipas\Rest\Configuration;
 use Tester\Assert;
 
 require __DIR__ . '/../bootstrap.php';
@@ -9,10 +10,11 @@ require __DIR__ . '/../bootstrap.php';
 $instanceName = "instance";
 $userEmail = "email";
 $apiKey = "key";
-$apiUrl = "url";
-$conn = new Connection($instanceName, $userEmail, $apiKey, $apiUrl);
+$apiUrl = "http://my.domain.com/api";
+$conn = new Configuration($instanceName, $userEmail, $apiKey, $apiUrl);
 
 Assert::equal($instanceName, $conn->getInstanceName());
 Assert::equal($userEmail, $conn->getUserName());
 Assert::equal($apiKey, $conn->getApiKey());
-Assert::equal($apiUrl, $conn->getApiUrl());
+Assert::true($conn->getApiUrl() instanceof Url);
+Assert::equal($apiUrl, $conn->getApiUrl()->absoluteUrl);

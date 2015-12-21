@@ -1,13 +1,14 @@
 <?php
 
 namespace Pipas\Rest;
+use Nette\Http\Url;
 
 /**
  * Collection of setting for connection with REST API
  *
  * @author Petr Štipek <p.stipek@email.cz>
  */
-class Connection
+class Configuration
 {
 	/** @var string Name of instance or extra identifier */
 	private $identifier;
@@ -18,7 +19,7 @@ class Connection
 	/** @var string Password or ApiKey or Api Security token */
 	private $password;
 
-	/** @var string Target URI */
+	/** @var Url Target URI */
 	private $url;
 
 	/**
@@ -34,7 +35,7 @@ class Connection
 		$this->identifier = $identifier;
 		$this->username = $username;
 		$this->password = $password;
-		$this->url = $url;
+		$this->url = new Url($url);
 	}
 
 	/**
@@ -65,8 +66,8 @@ class Connection
 	}
 
 	/**
-	 *
-	 * @return string
+	 * API URL
+	 * @return Url
 	 */
 	function getApiUrl()
 	{
