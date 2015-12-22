@@ -5,7 +5,6 @@ namespace Pipas\Rest\Debug;
 
 use Nette\Http\Url;
 use Nette\Object;
-use Tracy\Dumper;
 
 /**
  * @author Petr Štipek <p.stipek@email.cz>
@@ -28,17 +27,17 @@ class Log extends Object
 	 * Create log ans start timing
 	 * @param string $type
 	 * @param Url|string $url
-	 * @param array $params
+	 * @param array $data POST and PUT data
 	 */
-	public function __construct($type, $url, array $params = null)
+	public function __construct($type, Url $url, array $data = null)
 	{
-		$this->type = $type;
-		$this->params = $params;
-		if ($url instanceof Url) {
-			$this->params = $url->queryParameters;
-			$url->setQuery("");
+		$this->type = strtoupper($type);
+		$this->url = $url;
+		if ($data AND ($this->type == self::POST OR $this->type == self::PUT)) {
+			$this->params = $data;
+		} else {
+			$this->params = $this->url->queryParameters;
 		}
-		$this->url = (string)$url;
 		$this->start = microtime(true);
 	}
 
@@ -63,7 +62,7 @@ class Log extends Object
 
 	/*********************************** Getters ****************************************/
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getType()
 	{
@@ -71,7 +70,7 @@ class Log extends Object
 	}
 
 	/**
-	 * @return mixed
+	 * @return Url
 	 */
 	public function getUrl()
 	{
@@ -87,26 +86,10 @@ class Log extends Object
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getParamsAsHtml()
-	{
-		return Dumper::toHtml($this->params);
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getResult()
 	{
 		return $this->result;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getResultAsHtml()
-	{
-		return Dumper::toHtml($this->result);
 	}
 }

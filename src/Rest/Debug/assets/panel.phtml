@@ -2,16 +2,17 @@
 
 namespace Pipas\Rest\Debug;
 
+use Tracy\Dumper;
+
 ?>
 
 <h1>REST communication</h1>
-<div class="nette-inner">
+<div class="nette-inner" id="rest-panel">
 	<table>
 		<thead>
 		<tr>
 			<th>Type</th>
 			<th>Time (ms)</th>
-			<th>URL</th>
 			<th>Parameters</th>
 			<th>Response</th>
 		</tr>
@@ -19,15 +20,25 @@ namespace Pipas\Rest\Debug;
 		<tbody>
 		<?php
 		foreach (Logger::getList() as $log) {
-			echo "<tr>
-				<td>" . $log->getType() . "</td>
-				<td>" . number_format($log->getTimeDelta() * 1000, 0, ".", " ") . "</td>
-				<td>" . $log->getUrl() . "</td>
-				<td>" . $log->getParamsAsHtml() . "</td>
-				<td>" . $log->getResultAsHtml() . "</td>
-			</tr>";
+			?>
+			<tr>
+				<td class='url' colspan='4'><?php echo $log->getUrl()->absoluteUrl; ?></td>
+			</tr>
+			<tr>
+				<td><?php echo $log->getType(); ?></td>
+				<td><?php echo($log->getTimeDelta() ? number_format($log->getTimeDelta() * 1000, 0, ".", " ") : ''); ?></td>
+				<td><?php echo Dumper::toHtml($log->getParams(), array(Dumper::COLLAPSE => true)); ?></td>
+				<td><?php echo Dumper::toHtml($log->getResult(), array(Dumper::COLLAPSE => true)); ?></td>
+			</tr>
+			<?php
 		}
 		?>
 		</tbody>
 	</table>
 </div>
+<style>
+	#rest-panel table .url {
+		background: #3484d2;
+		color: white;
+	}
+</style>

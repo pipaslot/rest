@@ -23,8 +23,6 @@ test(function () {
 	Assert::equal($result, $log->getResult());
 	Assert::true($log->getTimeDelta() > 0);
 
-	Assert::true(is_string($log->getParamsAsHtml()));
-	Assert::true(is_string($log->getResultAsHtml()));
 });
 
 //Passing URL object
@@ -37,13 +35,19 @@ test(function () {
 	Assert::equal(array(), $log->getParams());
 });
 
-//Passing URL object with parameters
+
+//Clone URL object for the prevention of adjustments reflecting changes in the log
 test(function () {
-	$url = new Url("myurl");
-	$url->setQuery("first=1&second=2");
+	$params = array("first" => 1, "second" => 2);
+	$url = new Url("http://my-url.com");
+	$urlWithParams = clone $url;
+	$urlWithParams->setQuery($params);
+	$hash = $url->__toString();
+	dump($urlWithParams);
 	$log = new Log("GET", $url);
 
-	Assert::equal($url->getAbsoluteUrl(), $log->getUrl());
-	Assert::equal(array("first" => '1', "second" => '2'), $log->getParams());
+	Assert::equal($params, $log->getParams()); //Gets parameters to log
+	Assert::equal($url->__toString(), $log->getUrl());// Remove query parameters from log address
+	Assert::equal($hash, $url->__toString());//Check that default object was not changed
 });
 
