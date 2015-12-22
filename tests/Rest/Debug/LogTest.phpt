@@ -20,6 +20,9 @@ test(function () {
 	Assert::same($url, $log->getUrl());
 	Assert::equal($result, $log->getResult());
 	Assert::true($log->getTimeDelta() > 0);
+	Assert::false($log->isCached());
+	$log->setCached();
+	Assert::true($log->isCached());
 });
 //PUT and POST parameters passing
 test(function () {

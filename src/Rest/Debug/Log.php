@@ -22,6 +22,7 @@ class Log extends Object
 	private $result;
 	private $start;
 	private $end;
+	private $cached = false;
 
 	/**
 	 * Create log ans start timing
@@ -49,6 +50,26 @@ class Log extends Object
 	{
 		$this->result = $result;
 		$this->end = microtime(true);
+	}
+
+	/**
+	 * Result was taken from cache
+	 * @param bool $cached
+	 * @return $this
+	 */
+	public function setCached($cached = true)
+	{
+		$this->cached = (bool)$cached;
+		return $this;
+	}
+
+	/**
+	 * Result war taken from cache
+	 * @return bool
+	 */
+	public function isCached()
+	{
+		return $this->cached;
 	}
 
 	/**

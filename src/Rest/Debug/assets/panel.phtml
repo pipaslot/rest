@@ -12,7 +12,8 @@ use Tracy\Dumper;
 		<thead>
 		<tr>
 			<th>Type</th>
-			<th>Time (ms)</th>
+			<th>Time</th>
+			<th>Cached</th>
 			<th>Parameters</th>
 			<th>Response</th>
 		</tr>
@@ -22,11 +23,12 @@ use Tracy\Dumper;
 		foreach (Logger::getList() as $log) {
 			?>
 			<tr>
-				<td class='url' colspan='4'><?php echo $log->getUrl()->absoluteUrl; ?></td>
+				<td class='url' colspan='5'><?php echo $log->getUrl()->absoluteUrl; ?></td>
 			</tr>
 			<tr>
 				<td><?php echo $log->getType(); ?></td>
-				<td><?php echo($log->getTimeDelta() ? number_format($log->getTimeDelta() * 1000, 0, ".", " ") : ''); ?></td>
+				<td><?php echo($log->getTimeDelta() ? number_format($log->getTimeDelta() * 1000, 0, ".", " ") . " ms" : ''); ?></td>
+				<td><?php echo Dumper::toHtml($log->isCached()); ?></td>
 				<td><?php echo Dumper::toHtml($log->getParams(), array(Dumper::COLLAPSE => true)); ?></td>
 				<td><?php echo Dumper::toHtml($log->getResult(), array(Dumper::COLLAPSE => true)); ?></td>
 			</tr>
