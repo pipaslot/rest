@@ -8,31 +8,34 @@ require __DIR__ . '/../../bootstrap.php';
 
 //Default plain construction
 test(function () {
-	$type = "TYPE";
-	$url = "myurl";
-	$params = array("one", "two");
+	$type = "GET";
+	$url = new Url("myurl");
 	$result = array("my", "result");
-	$log = new Log($type, $url, $params);
+	$log = new Log($type, $url);
 	Assert::null($log->getTimeDelta());
 
 	$log->end($result);
 
 	Assert::equal($type, $log->getType());
-	Assert::equal($url, $log->getUrl());
-	Assert::equal($params, $log->getParams());
+	Assert::same($url, $log->getUrl());
 	Assert::equal($result, $log->getResult());
 	Assert::true($log->getTimeDelta() > 0);
-
 });
-
-//Passing URL object
+//PUT and POST parameters passing
 test(function () {
-	$url = new Url("myurl");
-	$params = array("one", "two");
-	$log = new Log("GET", $url, $params);
+	$data = array("one", "two");
+	$params = array("first", "second");
+	$url = new Url("my-url.com");;
+	$url->setQuery($params);
 
-	Assert::equal($url->getAbsoluteUrl(), $log->getUrl());
-	Assert::equal(array(), $log->getParams());
+	$log1 = new Log(Log::PUT, $url, $data);
+	Assert::equal($data, $log1->getParams());
+	$log2 = new Log(Log::POST, $url, $data);
+	Assert::equal($data, $log2->getParams());
+	$log3 = new Log(Log::GET, $url, $data);
+	Assert::equal($params, $log3->getParams());
+	$log4 = new Log(Log::DELETE, $url, $data);
+	Assert::equal($params, $log4->getParams());
 });
 
 
@@ -43,11 +46,10 @@ test(function () {
 	$urlWithParams = clone $url;
 	$urlWithParams->setQuery($params);
 	$hash = $url->__toString();
-	dump($urlWithParams);
+
 	$log = new Log("GET", $url);
 
-	Assert::equal($params, $log->getParams()); //Gets parameters to log
-	Assert::equal($url->__toString(), $log->getUrl());// Remove query parameters from log address
+	Assert::equal($url->__toString(), $log->getUrl()->__toString());// Remove query parameters from log address
 	Assert::equal($hash, $url->__toString());//Check that default object was not changed
 });
 
