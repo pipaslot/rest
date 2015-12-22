@@ -14,14 +14,23 @@ test(function () {
 	$log = new Log($type, $url);
 	Assert::null($log->getTimeDelta());
 
-	$log->end($result);
+	$resultFormENd = $log->end($result);
+	Assert::equal($result, $resultFormENd);    //end returns result
+	Assert::true($log->getTimeDelta() > 0);//TimeDelta was setup
 
 	Assert::equal($type, $log->getType());
 	Assert::same($url, $log->getUrl());
 	Assert::equal($result, $log->getResult());
-	Assert::true($log->getTimeDelta() > 0);
+
+	//Set cached
 	Assert::false($log->isCached());
 	$log->setCached();
+	Assert::true($log->isCached());
+
+	//set cached from end
+	$log->setCached(false);
+	Assert::false($log->isCached());
+	$log->end($result, true);
 	Assert::true($log->isCached());
 });
 //PUT and POST parameters passing

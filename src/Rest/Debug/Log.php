@@ -44,12 +44,16 @@ class Log extends Object
 
 	/**
 	 * Exits the measurement and write the result
-	 * @param $result
+	 * @param mixed $result
+	 * @param bool $isCached
+	 * @return mixed Result
 	 */
-	public function end($result = null)
+	public function end($result = null, $isCached = false)
 	{
 		$this->result = $result;
 		$this->end = microtime(true);
+		$this->setCached($isCached);
+		return $result;
 	}
 
 	/**
