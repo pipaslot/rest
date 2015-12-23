@@ -11,6 +11,7 @@ test(function () {
 	$type = "GET";
 	$url = new Url("myurl");
 	$result = array("my", "result");
+	$description = "extra description";
 	$log = new Log($type, $url);
 	Assert::null($log->getTimeDelta());
 
@@ -32,6 +33,11 @@ test(function () {
 	Assert::false($log->isCached());
 	$log->end($result, true);
 	Assert::true($log->isCached());
+
+	//Description
+	Assert::equal("", $log->getDescription());
+	$log->setDescription($description);
+	Assert::equal($description, $log->getDescription());
 });
 //PUT and POST parameters passing
 test(function () {

@@ -23,6 +23,7 @@ class Log extends Object
 	private $start;
 	private $end;
 	private $cached = false;
+	private $description = "";
 
 	/**
 	 * Create log ans start timing
@@ -85,6 +86,17 @@ class Log extends Object
 		return (isset($this->start) AND isset($this->end)) ? $this->end - $this->start : null;
 	}
 
+	/**
+	 * @param string $description
+	 * @return $this
+	 */
+	public function setDescription($description)
+	{
+		$this->description = (string)$description;
+		return $this;
+	}
+
+
 	/*********************************** Getters ****************************************/
 	/**
 	 * @return string
@@ -117,4 +129,13 @@ class Log extends Object
 	{
 		return $this->result;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
+
 }

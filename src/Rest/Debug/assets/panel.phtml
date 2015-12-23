@@ -18,10 +18,10 @@ use Tracy\Dumper;
 			<th>Response</th>
 		</tr>
 		</thead>
-		<tbody>
 		<?php
 		foreach (Logger::getList() as $log) {
 			?>
+			<tbody title="<?php echo $log->getDescription(); ?>">
 			<tr>
 				<td class='url' colspan='5'><?php echo $log->getUrl()->absoluteUrl; ?></td>
 			</tr>
@@ -32,10 +32,10 @@ use Tracy\Dumper;
 				<td><?php echo Dumper::toHtml($log->getParams(), array(Dumper::COLLAPSE => true)); ?></td>
 				<td><?php echo Dumper::toHtml($log->getResult(), array(Dumper::COLLAPSE => true)); ?></td>
 			</tr>
+			</tbody>
 			<?php
 		}
 		?>
-		</tbody>
 	</table>
 </div>
 <style>
