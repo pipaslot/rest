@@ -23,7 +23,7 @@ use Tracy\Dumper;
 			?>
 			<tbody title="<?php echo $log->getDescription(); ?>">
 			<tr>
-				<td class='url' colspan='5'><?php echo $log->getUrl()->absoluteUrl; ?></td>
+				<td class='url' colspan='5'><?php echo rawurldecode($log->getUrl()->absoluteUrl); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo $log->getType(); ?></td>
