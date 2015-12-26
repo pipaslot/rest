@@ -4,9 +4,15 @@ namespace Pipas\Rest\Debug;
 
 use Tracy\Dumper;
 
+$totalTime = 0;
+foreach (Logger::getList() as $log) {
+	$totalTime += $log->getTimeDelta();
+}
 ?>
 
-<h1>REST communication</h1>
+<h1>REST communication:
+	<small><?php echo number_format($totalTime, 3, ".", " ") . " s"; ?></small>
+</h1>
 <div class="nette-inner" id="rest-panel">
 	<table>
 		<thead>
