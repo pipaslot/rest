@@ -33,22 +33,25 @@ class DataArrayTest extends TestCase
 			'surname' => "Kramolis"
 		)
 	);
+	/** @var ResultMapper */
+	private $mapper;
 
 	function setUp()
 	{
-		$mapper = ResultMapper::create();
-		$this->array = $mapper->mapData($this->data);
+		$this->mapper = new ResultMapper();
+		$this->array = $this->mapper->mapData($this->data);
 	}
 
 	function testSortSame()
 	{
-		$coll = new DataArray(array(
-			array(
+		$array = array(
+			0 => array(
 				'id' => 1
 			),
-			array(
+			1 => array(
 				'id' => 1
-			)));
+			));
+		$coll = new DataArray(new \ArrayObject($array));
 		Assert::true($coll->sortBy("id"));
 		Assert::equal(1, $coll[0]['id']);
 		Assert::equal(1, $coll[1]['id']);
@@ -139,7 +142,6 @@ class DataArrayTest extends TestCase
 
 	function test_arrayAccess()
 	{
-
 		$new = 2;
 		$this->array->offsetSet(1, $new);
 		Assert::equal($new, $this->array->offsetGet(1));

@@ -9,23 +9,23 @@ namespace Pipas\Rest\Result;
  */
 class DataSet extends DataArray
 {
-    /** @var int */
-    protected $totalCount;
+	/** @var int */
+	protected $totalCount;
 
-    function __construct($data = array(), $totalCount = 0)
-    {
-        $this->totalCount = (int)$totalCount;
-        parent::__construct($data);
-    }
+	function __construct(\ArrayObject $data = null, $totalCount = 0)
+	{
+		$this->totalCount = (int)$totalCount;
+		parent::__construct($data);
+	}
 
-    /**
-     * Total count of existing records into database
-     * @return int
-     */
-    function getTotalCount()
-    {
-        return $this->totalCount;
-    }
+	/**
+	 * Total count of existing records into database
+	 * @return int
+	 */
+	function getTotalCount()
+	{
+		return $this->totalCount;
+	}
 
 
 }

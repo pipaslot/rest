@@ -25,26 +25,24 @@ class ResultMapper implements IResultMapper
 		return self::$instance;
 	}
 
-	protected function __construct()
-	{
-	}
-
 	/** @var array List of properties defined in annotations */
 	private $classProperties = array();
 
 	/**
 	 * Maps data array to DataArray and DataHash Objects
 	 * @param array $data
-	 * @param null|string $classType
+	 * @param null|string $hashType
+	 * @param null|string $arrayType
 	 * @return DataArray|DataHash
 	 */
-	public function mapData($data, $classType = null)
+	public function mapData($data, $hashType = DataHash::class, $arrayType = DataArray::class)
 	{
 		if (!is_array($data)) return $data;
-		if ($classType) {
-			return $this->isArrayOfAssociativeArrays($data) ? $this->mapDataArray($data, $classType) : $this->mapDataHash($data, $classType);
-		}
-		return $this->isArrayOfAssociativeArrays($data) ? $this->mapDataArray($data) : $this->mapDataHash($data);
+		if (count($data) == 0) return new $hashType();
+		if ($hashType == null) $hashType = DataHash::class;
+		if ($arrayType == null) $arrayType = DataArray::class;
+
+		return $this->isArrayOfAssociativeArrays($data) ? $this->mapDataArray($data, $arrayType, $hashType) : $this->mapDataHash($data, $hashType);
 	}
 
 	/**
@@ -56,7 +54,8 @@ class ResultMapper implements IResultMapper
 	public function mapDataSet($data, $totalCount = 0, $classType = DataSet::class)
 	{
 		if ($data === null) return null;
-		$cData = array();
+		if ($classType == null) $classType = DataSet::class;
+		$cData = new \ArrayObject();
 		foreach ($data as $row) {
 			$cData[$row['id']] = $this->mapDataHash($row);
 		}
@@ -72,6 +71,7 @@ class ResultMapper implements IResultMapper
 	public function mapEntity($data, IReadOnlyService $repository, $classType = Contract::class)
 	{
 		if ($data === null) return null;
+		if ($classType == null) $classType = Contract::class;
 		$obj = new $classType($repository);
 		$mapped = $this->initDataHash($obj, $data);
 		return $mapped;
@@ -86,6 +86,7 @@ class ResultMapper implements IResultMapper
 	public function convertDataHashToEntity(DataHash $dataHash = null, IReadOnlyService $repository = null, $classType = Contract::class)
 	{
 		if ($dataHash == null) return null;
+		if ($classType == null) $classType = Contract::class;
 		$entity = new $classType($repository);
 		foreach ($dataHash->toArray() as $key => $val) {
 			$entity->$key = $val;
@@ -102,6 +103,7 @@ class ResultMapper implements IResultMapper
 	public function convertDataSetToEntitySet(DataSet $dataSet = null, IReadOnlyService $repository = null, $classType = Contract::class)
 	{
 		if ($dataSet == null) return null;
+		if ($classType == null) $classType = Contract::class;
 		$set = new DataSet();
 		foreach ($dataSet->getData() as $key => $val) {
 			$set->offsetSet($key, $this->mapEntity($val, $repository, $classType));
@@ -145,16 +147,17 @@ class ResultMapper implements IResultMapper
 
 	/**
 	 * @param array $data
-	 * @param string $classType
+	 * @param string $arrayType
+	 * @param $hashType
 	 * @return DataArray
 	 */
-	protected function mapDataArray($data, $classType = DataArray::class)
+	protected function mapDataArray($data, $arrayType = DataArray::class, $hashType = DataHash::class)
 	{
 		/** @var DataArray $obj */
-		$obj = new $classType();
+		$obj = new $arrayType();
 		foreach ($data as $key => $value) {
 			if (is_array($value)) {
-				$obj->offsetSet($key, $this->isArrayOfAssociativeArrays($value) ? $this->mapDataArray($value) : $this->mapDataHash($value));
+				$obj->offsetSet($key, $this->isArrayOfAssociativeArrays($value) ? $this->mapDataArray($value, $arrayType, $hashType) : $this->mapDataHash($value, $hashType));
 			} else {
 				$obj->offsetSet($key, $value);
 			}

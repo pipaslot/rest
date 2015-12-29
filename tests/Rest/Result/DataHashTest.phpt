@@ -128,8 +128,9 @@ class DataHashTest extends TestCase
 	function test_lazyInitialization()
 	{
 		$fake = new FakeContract();
-		Assert::true($fake->subEntity instanceof FakeSubContract);
-		Assert::true($fake->nesmysl instanceof FakeSubContract);
+		$fake->subEntity;
+		Assert::true($fake->subEntity instanceof FakeSubContract, get_class($fake->subEntity));
+		Assert::true($fake->nesmysl instanceof FakeSubContract, get_class($fake->nesmysl));
 	}
 }
 
@@ -171,7 +172,7 @@ class FakeMagicDataHash extends DataHash
 
 /**
  * Class FakeContract
- * @package Test\Pipas\Rest\Result
+ *
  * @property-read FakeSubContract $subEntity
  * @property-read FakeSubContract $nesmysl S popiskem
  */
@@ -179,7 +180,7 @@ class FakeContract extends Contract
 {
 
 	/** @var FakeSubContract */
-	protected $subEntity;
+	protected $subEntity = array("id" => 5);
 
 }
 

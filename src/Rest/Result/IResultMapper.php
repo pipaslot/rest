@@ -14,10 +14,11 @@ interface IResultMapper
 	/**
 	 * Maps data array to DataArray and DataHash Objects
 	 * @param array $data
-	 * @param null|string $classType
+	 * @param null|string $hashType
+	 * @param null|string $arrayType
 	 * @return DataArray|DataHash
 	 */
-	public function mapData($data, $classType = null);
+	public function mapData($data, $hashType = DataHash::class, $arrayType = DataArray::class);
 
 	/**
 	 * @param array|null $data
