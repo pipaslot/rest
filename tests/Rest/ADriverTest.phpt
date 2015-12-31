@@ -1,5 +1,6 @@
 <?php
 
+use Mockery\MockInterface;
 use Nette\Caching\IStorage;
 use Pipas\Rest\ADriver;
 use Pipas\Rest\IConnection;
@@ -38,13 +39,19 @@ class FakeDriver extends ADriver
 	function delete($serviceName, array $query = array())
 	{
 	}
+
+	function buildUrl($serviceName, $query = array())
+	{
+	}
 }
 
 //Description
 test(function () {
-
+	/** @var MockInterface|IConnection $connection */
 	$connection = Mockery::mock(IConnection::class);
+	/** @var MockInterface|IResultMapper $resultMapper */
 	$resultMapper = Mockery::mock(IResultMapper::class);
+	/** @var MockInterface|IStorage $storage */
 	$storage = Mockery::mock(IStorage::class);
 
 	$driver = new FakeDriver($connection, $resultMapper, $storage);

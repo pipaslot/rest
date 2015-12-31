@@ -2,6 +2,7 @@
 
 namespace Pipas\Rest;
 
+use Nette\Http\Url;
 use Pipas\Rest\Result\DataHash;
 use Pipas\Rest\Result\DataSet;
 
@@ -71,5 +72,13 @@ interface IDriver
 	 * @return bool
 	 */
 	function delete($serviceName, array $query = array());
+
+	/**
+	 * Builds URL for connection
+	 * @param $serviceName
+	 * @param array $query
+	 * @return Url
+	 */
+	function buildUrl($serviceName, $query = array());
 
 }
