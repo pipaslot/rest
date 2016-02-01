@@ -124,6 +124,25 @@ class ResultMapper_mapDataTest extends TestCase
 	}
 
 
+	public function test_sameMapping2()
+	{
+		$entity1 = array(
+			array(
+				"address" => array("id" => 3),
+				"territory" => array("id" => 5)
+			)
+		);
+		$entity2 = array(
+			array(
+				"address" => array("id" => 3),
+				"territory" => null
+			)
+		);
+		$mapped1 = $this->mapper->mapData($entity1);
+		$mapped2 = $this->mapper->mapData($entity2);
+		Assert::equal(get_class($mapped1[0]), get_class($mapped2[0]));
+	}
+
 }
 
 class FakedDataHash extends DataHash

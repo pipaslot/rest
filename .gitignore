@@ -1,0 +1,7 @@
+**/.*
+/tests/tester.bat
+/tests/php.ini
+/tests/code-coverage.html
+/vendor
+/composer.lock
+/temp

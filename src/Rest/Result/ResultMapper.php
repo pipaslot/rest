@@ -256,6 +256,7 @@ class ResultMapper implements IResultMapper
 	private function isArrayOfAssociativeArrays(array $arr)
 	{
 		foreach ($arr as $sub) {
+			if ($sub == null) continue;
 			if (!is_array($sub) OR !$this->isAssociativeArray($sub)) return false;
 		}
 		return true;
