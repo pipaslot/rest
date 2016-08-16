@@ -8,7 +8,6 @@ namespace Pipas\Rest;
  */
 class RestException extends \Exception
 {
-
     const CODE_NOT_IMPLEMENTED = 1,
 		CODE_RESULT_SET_NOT_SUCCESSFULLY_LOADED = 2,
         CODE_NULL_VALUE = 3,
@@ -18,6 +17,26 @@ class RestException extends \Exception
         CODE_PROPERTY_MUST_BE_PROTECTED = 7;
 
     /*	 * ********* Static constructors ************* */
+
+	protected $data;
+
+	/**
+	 * @return mixed
+	 */
+	public function getData()
+	{
+		return $this->data;
+	}
+
+	/**
+	 * @param mixed $data
+	 * @return $this
+	 */
+	public function setData($data)
+	{
+		$this->data = $data;
+		return $this;
+	}
 
     /**
      * @return \self
@@ -29,11 +48,14 @@ class RestException extends \Exception
 
 	/**
 	 * @param string $url
+	 * @param null|mixed $result
 	 * @return RestException
 	 */
-	public static function resultSetNotSuccessfullyLoaded($url)
+	public static function resultSetNotSuccessfullyLoaded($url,$result = null)
     {
-		return new self("Can not successfully load data from query to: " . $url, self::CODE_RESULT_SET_NOT_SUCCESSFULLY_LOADED);
+    	$e = new self("Can not successfully load data from query to: " . $url, self::CODE_RESULT_SET_NOT_SUCCESSFULLY_LOADED);
+		$e->setData($result);
+		return $e;
     }
 
 	/**
