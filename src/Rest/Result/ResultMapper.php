@@ -68,12 +68,8 @@ class ResultMapper implements IResultMapper
 			$classType = DataSet::class;
 		}
 		$cData = new \ArrayObject();
-		foreach ($data as $row) {
-			if (isset($row['id'])) {
-				$cData[$row['id']] = $this->mapDataHash($row);
-			} else {
-				$cData[] = $this->mapDataHash($row);
-			}
+		foreach ($data as $key => $row) {
+			$cData[isset($row['id']) ? $row['id'] : $key] = $this->mapDataHash($row);
 		}
 		return new $classType($cData, $totalCount);
 	}
