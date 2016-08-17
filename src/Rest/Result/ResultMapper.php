@@ -33,14 +33,22 @@ class ResultMapper implements IResultMapper
 	 * @param array $data
 	 * @param null|string $hashType
 	 * @param null|string $arrayType
-	 * @return DataArray|DataHash
+	 * @return DataArray|DataHash|mixed
 	 */
 	public function mapData($data, $hashType = DataHash::class, $arrayType = DataArray::class)
 	{
-		if (!is_array($data)) return $data;
-		if (count($data) == 0) return new $hashType();
-		if ($hashType == null) $hashType = DataHash::class;
-		if ($arrayType == null) $arrayType = DataArray::class;
+		if (!is_array($data)) {
+			return $data;
+		}
+		if (count($data) == 0) {
+			return new $hashType();
+		}
+		if ($hashType == null) {
+			$hashType = DataHash::class;
+		}
+		if ($arrayType == null) {
+			$arrayType = DataArray::class;
+		}
 
 		return $this->isArrayOfAssociativeArrays($data) ? $this->mapDataArray($data, $arrayType, $hashType) : $this->mapDataHash($data, $hashType);
 	}
@@ -53,11 +61,19 @@ class ResultMapper implements IResultMapper
 	 */
 	public function mapDataSet($data, $totalCount = 0, $classType = DataSet::class)
 	{
-		if ($data === null) return null;
-		if ($classType == null) $classType = DataSet::class;
+		if ($data === null) {
+			return null;
+		}
+		if ($classType == null) {
+			$classType = DataSet::class;
+		}
 		$cData = new \ArrayObject();
 		foreach ($data as $row) {
-			$cData[$row['id']] = $this->mapDataHash($row);
+			if (isset($row['id'])) {
+				$cData[$row['id']] = $this->mapDataHash($row);
+			} else {
+				$cData[] = $this->mapDataHash($row);
+			}
 		}
 		return new $classType($cData, $totalCount);
 	}
@@ -70,8 +86,12 @@ class ResultMapper implements IResultMapper
 	 */
 	public function mapEntity($data, IReadOnlyService $repository, $classType = Contract::class)
 	{
-		if ($data === null) return null;
-		if ($classType == null) $classType = Contract::class;
+		if ($data === null) {
+			return null;
+		}
+		if ($classType == null) {
+			$classType = Contract::class;
+		}
 		$obj = new $classType($repository);
 		$mapped = $this->initDataHash($obj, $data);
 		return $mapped;
@@ -85,8 +105,12 @@ class ResultMapper implements IResultMapper
 	 */
 	public function convertDataHashToEntity(DataHash $dataHash = null, IReadOnlyService $repository = null, $classType = Contract::class)
 	{
-		if ($dataHash == null) return null;
-		if ($classType == null) $classType = Contract::class;
+		if ($dataHash == null) {
+			return null;
+		}
+		if ($classType == null) {
+			$classType = Contract::class;
+		}
 		$entity = new $classType($repository);
 		foreach ($dataHash->toArray() as $key => $val) {
 			$entity->$key = $val;
@@ -98,12 +122,16 @@ class ResultMapper implements IResultMapper
 	 * @param DataSet|null $dataSet
 	 * @param IReadOnlyService|null $repository
 	 * @param string $classType
-	 * @return Contract|null
+	 * @return DataSet|null
 	 */
 	public function convertDataSetToEntitySet(DataSet $dataSet = null, IReadOnlyService $repository = null, $classType = Contract::class)
 	{
-		if ($dataSet == null) return null;
-		if ($classType == null) $classType = Contract::class;
+		if ($dataSet == null) {
+			return null;
+		}
+		if ($classType == null) {
+			$classType = Contract::class;
+		}
 		$set = new DataSet();
 		foreach ($dataSet->getData() as $key => $val) {
 			$set->offsetSet($key, $this->mapEntity($val, $repository, $classType));
@@ -177,7 +205,9 @@ class ResultMapper implements IResultMapper
 		if (!isset($this->classProperties[$className])) {
 			$this->classProperties[$className] = array();
 			$ref = new ClassType($className);
-			if ($ref->isAbstract() OR $ref->isInterface()) throw new RestException("Class can not be either abstract nor interface");
+			if ($ref->isAbstract() OR $ref->isInterface()) {
+				throw new RestException("Class can not be either abstract nor interface");
+			}
 			$ann = $ref->getAnnotations();
 			$parents = class_parents($className);
 			$parents[$className] = $className;
@@ -199,14 +229,18 @@ class ResultMapper implements IResultMapper
 	 */
 	private function parseProperties(ClassType $ref, array $annotations, $type)
 	{
-		if (!isset($annotations[$type])) return;
+		if (!isset($annotations[$type])) {
+			return;
+		}
 		foreach ($annotations[$type] as $val) {
 			$trimmed = trim(preg_replace('!\s+!', ' ', $val));//Replace multiple whitespaces
 			$className = strstr($trimmed, ' ', true);
 			//Try find full name of existing class
 			if (!class_exists($className)) {
 				$className = $ref->getNamespaceName() . '\\' . trim($className, '\\');
-				if (!class_exists($className)) continue;
+				if (!class_exists($className)) {
+					continue;
+				}
 			}
 			$parents = class_parents($className);
 			if ($className != DataHash::class AND (!$parents OR !in_array(DataHash::class, $parents))) {
@@ -233,7 +267,9 @@ class ResultMapper implements IResultMapper
 	private function getClassPropertyByName(ClassType $ref, $name)
 	{
 		foreach ($ref->properties as $prop) {
-			if ($prop->name == $name) return $prop;
+			if ($prop->name == $name) {
+				return $prop;
+			}
 		}
 		return null;
 	}
@@ -255,10 +291,16 @@ class ResultMapper implements IResultMapper
 	 */
 	private function isArrayOfAssociativeArrays(array $arr)
 	{
-		if ($this->isAssociativeArray($arr)) return false;
+		if ($this->isAssociativeArray($arr)) {
+			return false;
+		}
 		foreach ($arr as $sub) {
-			if ($sub == null) continue;
-			if (!is_array($sub) OR !$this->isAssociativeArray($sub)) return false;
+			if ($sub == null) {
+				continue;
+			}
+			if (!is_array($sub) OR !$this->isAssociativeArray($sub)) {
+				return false;
+			}
 		}
 		return true;
 	}
