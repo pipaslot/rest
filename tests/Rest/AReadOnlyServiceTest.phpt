@@ -20,11 +20,8 @@ namespace Fakes {
 namespace Tests {
 
 	use Mockery;
-	use Nette\Caching\IStorage;
 	use Pipas\Rest\AContext;
 	use Pipas\Rest\AService;
-	use Pipas\Rest\IConnection;
-	use Pipas\Rest\IContext;
 	use Pipas\Rest\IDriver;
 	use Pipas\Rest\Result\Contract;
 	use Tester\Assert;
@@ -34,9 +31,9 @@ namespace Tests {
 	class FakeContext extends AContext
 	{
 
-		function __construct(IConnection $driver, IStorage $cacheStorage)
+		function __construct(IDriver $driver)
 		{
-			parent::__construct($driver, $cacheStorage);
+			parent::__construct($driver);
 			$this->addServiceMapping("*Service");
 		}
 
@@ -108,8 +105,6 @@ namespace Tests {
 
 	class AReadOnlyServiceTest extends TestCase
 	{
-		/** @var Mockery\MockInterface|IContext */
-		private $context;
 		/** @var Mockery\MockInterface|IDriver */
 		private $driver;
 
@@ -117,30 +112,22 @@ namespace Tests {
 		{
 			parent::setUp();
 			$this->driver = Mockery::mock(IDriver::class);
-			$this->context = Mockery::mock(FakeContext::class);
-			$this->context->shouldReceive("getDriver")->andReturn($this->driver);
 		}
 
 		private function createRepository()
 		{
-			return new FakeService($this->context);
-		}
-
-		function test_getContext()
-		{
-			$rep = $this->createRepository();
-			Assert::same($this->context, $rep->getContext());
+			return new FakeService($this->driver);
 		}
 
 		function test_getServiceNameByClassName()
 		{
-			$rep = new FakeCompanyService($this->context);
+			$rep = new FakeCompanyService($this->driver);
 			Assert::equal("fakeCompany", $rep->getName());
 		}
 
 		function test_getServiceNameByClassNameUnderNamespace()
 		{
-			$rep = new \Fakes\FakeCompanyService($this->context);
+			$rep = new \Fakes\FakeCompanyService($this->driver);
 			Assert::equal("fakeCompany", $rep->getName());
 		}
 

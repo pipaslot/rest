@@ -54,7 +54,7 @@ test(function () {
 	/** @var MockInterface|IStorage $storage */
 	$storage = Mockery::mock(IStorage::class);
 
-	$driver = new FakeDriver($connection, $resultMapper, $storage);
+	$driver = new FakeDriver($connection, $storage, $resultMapper);
 	Assert::same($connection, $driver->getConnection());
 });
 

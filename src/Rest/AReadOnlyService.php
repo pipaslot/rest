@@ -5,6 +5,7 @@ namespace Pipas\Rest;
 use Nette\Utils\Strings;
 use Pipas\Rest\Result\Contract;
 use Pipas\Rest\Result\DataSet;
+use Pipas\Rest\Result\IResultMapper;
 use Pipas\Rest\Result\ResultMapper;
 
 /**
@@ -14,26 +15,15 @@ use Pipas\Rest\Result\ResultMapper;
  */
 abstract class AReadOnlyService implements IReadOnlyService
 {
-	/** @var IContext */
-	protected $context;
 	/** @var ResultMapper */
 	protected $resultMapper;
 	/** @var IDriver */
 	protected $driver;
 
-	function __construct(IContext $context)
+	function __construct(IDriver $driver, IResultMapper $resultMapper = null)
 	{
-		$this->context = $context;
-		$this->resultMapper = ResultMapper::create();
-		$this->driver = $context->getDriver();
-	}
-
-	/**
-	 * @return IContext
-	 */
-	public function getContext()
-	{
-		return $this->context;
+		$this->driver = $driver;
+		$this->resultMapper = $resultMapper == null ? ResultMapper::create() : $resultMapper;
 	}
 
 	/**
@@ -65,7 +55,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function find($id)
 	{
-		return $this->resultMapper->mapEntity($this->driver->find($this->getName(), $id), $this, $this->getContractName());
+		return $this->resultMapper->mapEntity($this->driver->find($this->getName(), $id), $this->getContractName());
 	}
 
 	/**
@@ -74,7 +64,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function findAll()
 	{
-		return $this->resultMapper->convertDataSetToEntitySet($this->driver->findAll($this->getName()), $this, $this->getContractName());
+		return $this->resultMapper->convertDataSetToEntitySet($this->driver->findAll($this->getName()), $this->getContractName());
 	}
 
 	/**
@@ -84,7 +74,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function findBy(array $query)
 	{
-		return $this->resultMapper->convertDataSetToEntitySet($this->driver->findBy($this->getName(), $query), $this, $this->getContractName());
+		return $this->resultMapper->convertDataSetToEntitySet($this->driver->findBy($this->getName(), $query), $this->getContractName());
 	}
 
 	/**
@@ -94,7 +84,7 @@ abstract class AReadOnlyService implements IReadOnlyService
 	 */
 	public function findOneBy(array $query = array())
 	{
-		return $this->resultMapper->mapEntity($this->driver->findOneBy($this->getName(), $query), $this, $this->getContractName());
+		return $this->resultMapper->mapEntity($this->driver->findOneBy($this->getName(), $query), $this->getContractName());
 	}
 
 }

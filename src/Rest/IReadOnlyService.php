@@ -14,11 +14,6 @@ interface IReadOnlyService
 	const NAME_SUFFIX = "Service";
 
 	/**
-	 * @return IContext
-	 */
-	function getContext();
-
-	/**
 	 * Find one by ID
 	 * @param int $id
 	 * @return DataHash|null

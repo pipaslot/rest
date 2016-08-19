@@ -62,7 +62,7 @@ abstract class AContext extends Object implements IContext
 				$class = str_replace("*", ucfirst($name), $mapping);
 				$attempts[] = $class;
 				if (class_exists($class)) {
-					$this->services[$name] = new $class($this);
+					$this->services[$name] = new $class($this->driver);
 					break;
 				}
 			}

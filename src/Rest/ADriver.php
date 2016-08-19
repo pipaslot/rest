@@ -23,14 +23,14 @@ abstract class ADriver implements IDriver
 	/**
 	 * ADriver constructor.
 	 * @param IConnection $connection
-	 * @param IResultMapper $resultMapper
 	 * @param IStorage $storage
+	 * @param IResultMapper $resultMapper
 	 */
-	public function __construct(IConnection $connection, IResultMapper $resultMapper, IStorage $storage)
+	public function __construct(IConnection $connection, IStorage $storage, IResultMapper $resultMapper = null)
 	{
 		$this->connection = $connection;
 		$this->cache = new Cache($storage, get_called_class());
-		$this->resultMapper = $resultMapper;
+		$this->resultMapper = $resultMapper == null ? ResultMapper::create() : $resultMapper;
 	}
 
 	/**

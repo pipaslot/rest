@@ -1,12 +1,11 @@
 <?php
 
-use Nette\Caching\IStorage;
 use Pipas\Rest\AContext;
 use Pipas\Rest\AService;
-use Pipas\Rest\IConnection;
-use Pipas\Rest\IContext;
+use Pipas\Rest\IDriver;
 use Pipas\Rest\RestException;
 use Pipas\Rest\Result\Contract;
+use Pipas\Rest\Result\ResultMapper;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -15,9 +14,9 @@ require __DIR__ . '/../bootstrap.php';
 class FakeContext extends AContext
 {
 
-	function __construct(IConnection $driver, IStorage $cacheStorage)
+	function __construct(IDriver $driver)
 	{
-		parent::__construct($driver, $cacheStorage);
+		parent::__construct($driver);
 		$this->addServiceMapping("*Service");
 	}
 
@@ -89,8 +88,6 @@ class FakeCompanyService extends AService
 
 class AServiceTest extends TestCase
 {
-	/** @var Mockery\MockInterface|IContext */
-	private $context;
 	/** @var Mockery\MockInterface|IDriver */
 	private $driver;
 
@@ -98,13 +95,11 @@ class AServiceTest extends TestCase
 	{
 		parent::setUp();
 		$this->driver = Mockery::mock(IDriver::class);
-		$this->context = Mockery::mock(FakeContext::class);
-		$this->context->shouldReceive("getDriver")->andReturn($this->driver);
 	}
 
 	private function createService()
 	{
-		return new FakeService($this->context);
+		return new FakeService($this->driver,ResultMapper::create());
 	}
 
 	function test_create()

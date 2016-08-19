@@ -19,6 +19,7 @@ class FakeContext extends AContext
 
 	/**
 	 * FakeContext constructor.
+	 * @param IDriver $driver
 	 */
 	public function __construct(IDriver $driver)
 	{
