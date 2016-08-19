@@ -2,8 +2,6 @@
 
 namespace Pipas\Rest\Result;
 
-use Pipas\Rest\IReadOnlyService;
-
 /**
  * Description of Contract
  *
@@ -12,70 +10,39 @@ use Pipas\Rest\IReadOnlyService;
 class Contract extends DataHash implements IContract
 {
 
-    /** @var int */
-    public $id;
+	/** @var int */
+	public $id;
 
-    /**
-     * @var IReadOnlyService
-     */
-    private $_service;
-
-    /**
-     *
-     * @param IReadOnlyService $repository
-     */
-    public function __construct(IReadOnlyService $repository = null)
-    {
-        $this->_service = $repository;
-    }
-
-    /**
+	/**
 	 *
 	 * Creates a specific object from the more abstract DataHash object if it passes a null, not end the program error but also returns a null value
 	 * @param DataHash $dataHash
-     * @param IReadOnlyService $repository
 	 * @return Contract|null
-     */
-    public static function fromDataHash(DataHash $dataHash = null, IReadOnlyService $repository = null)
-    {
-        if ($dataHash == null) return null;
-        $entity = new static($repository);
-        foreach ($dataHash->toArray() as $key => $val) {
-            $entity->$key = $val;
-        }
-        return $entity;
-    }
+	 */
+	public static function fromDataHash(DataHash $dataHash = null)
+	{
+		if ($dataHash == null) {
+			return null;
+		}
+		$entity = new static();
+		foreach ($dataHash->toArray() as $key => $val) {
+			$entity->$key = $val;
+		}
+		return $entity;
+	}
 
-    /**
-     * @return IReadOnlyService
-     */
-    public function getService()
-    {
-        return $this->_service;
-    }
+	public function __sleep()
+	{
+		return array();
+	}
 
-    /**
-     *
-     * @param IReadOnlyService $service
-     * @return self
-     */
-    public function setService(IReadOnlyService $service = null)
-    {
-        $this->_service = $service;
-        return $this;
-    }
-
-    public function __sleep()
-    {
-        $this->_service = null;
-        return array();
-    }
-
-    protected function toArrayFilter($propertyName, $value)
-    {
-        if (parent::toArrayFilter($propertyName, $value) OR $propertyName === "_repository") return true;
-        return false;
-    }
+	protected function toArrayFilter($propertyName, $value)
+	{
+		if (parent::toArrayFilter($propertyName, $value) OR $propertyName === "_repository") {
+			return true;
+		}
+		return false;
+	}
 
 	function __toString()
 	{

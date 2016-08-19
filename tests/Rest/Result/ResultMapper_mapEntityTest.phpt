@@ -2,9 +2,6 @@
 
 namespace Test\Libs\Rest\Result;
 
-use Mockery;
-use Nette;
-use Pipas\Rest\IReadOnlyService;
 use Pipas\Rest\Result\Contract;
 use Pipas\Rest\Result\DataArray;
 use Pipas\Rest\Result\DataHash;
@@ -45,16 +42,12 @@ class ResultMapper_mapEntityTest extends TestCase
 
 	public function test_null_mapEntity_null()
 	{
-		/** @var IReadOnlyService $mock */
-		$mock = Mockery::mock(IReadOnlyService::class);
-		Assert::null($this->mapper->mapEntity(null, $mock));
+		Assert::null($this->mapper->mapEntity(null));
 	}
 
 	public function test_array_mapEntity()
 	{
-		/** @var IReadOnlyService $repository */
-		$repository = Mockery::mock(IReadOnlyService::class);
-		$res = $this->mapper->mapEntity($this->data, $repository);
+		$res = $this->mapper->mapEntity($this->data);
 		$this->assertData($res);
 	}
 
@@ -62,32 +55,26 @@ class ResultMapper_mapEntityTest extends TestCase
 	{
 		$hash = $this->mapper->mapData($this->data);
 
-		/** @var IReadOnlyService $repository */
-		$repository = Mockery::mock(IReadOnlyService::class);
-		$res = $this->mapper->mapEntity($hash, $repository);
+		$res = $this->mapper->mapEntity($hash);
 		$this->assertData($res);
 	}
 
 	function test_nestedEntityInitialization()
 	{
-		/** @var IReadOnlyService $repository */
-		$repository = Mockery::mock(IReadOnlyService::class);
 		$expected = "expected value";
 		$data = array(
 			'subEntity' => array(
 				'data' => $expected
 			)
 		);
-		$fake = $this->mapper->mapEntity($data, $repository);
+		$fake = $this->mapper->mapEntity($data);
 		Assert::true($fake->subEntity != null);
 		Assert::equal($expected, $fake->subEntity->data);
 	}
 
 	public function test_nullTypes_defaultObject()
 	{
-		/** @var IReadOnlyService $repository */
-		$repository = Mockery::mock(IReadOnlyService::class);
-		$res = $this->mapper->mapEntity($this->data, $repository, null);
+		$res = $this->mapper->mapEntity($this->data,  null);
 		Assert::true($res instanceof Contract, get_class($res));
 	}
 	/*************************************************/

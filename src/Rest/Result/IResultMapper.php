@@ -2,7 +2,6 @@
 
 namespace Pipas\Rest\Result;
 
-use Pipas\Rest\IReadOnlyService;
 use Pipas\Rest\RestException;
 
 /**
@@ -30,27 +29,24 @@ interface IResultMapper
 
 	/**
 	 * @param array|DataArray|DataHash|null $data
-	 * @param IReadOnlyService $repository
 	 * @param $classType
 	 * @return Contract
 	 */
-	public function mapEntity($data, IReadOnlyService $repository, $classType = Contract::class);
+	public function mapEntity($data, $classType = Contract::class);
 
 	/**
 	 * @param DataHash|null $dataHash
-	 * @param IReadOnlyService|null $repository
 	 * @param string $classType
 	 * @return Contract|null
 	 */
-	public function convertDataHashToEntity(DataHash $dataHash = null, IReadOnlyService $repository = null, $classType = Contract::class);
+	public function convertDataHashToEntity(DataHash $dataHash = null, $classType = Contract::class);
 
 	/**
 	 * @param DataSet|null $dataSet
-	 * @param IReadOnlyService|null $repository
 	 * @param string $classType
 	 * @return Contract|null
 	 */
-	public function convertDataSetToEntitySet(DataSet $dataSet = null, IReadOnlyService $repository = null, $classType = Contract::class);
+	public function convertDataSetToEntitySet(DataSet $dataSet = null, $classType = Contract::class);
 
 	/**
 	 * Parse class and returns names and target classes of annotated properties

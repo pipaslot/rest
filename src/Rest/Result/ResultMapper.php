@@ -3,7 +3,6 @@
 namespace Pipas\Rest\Result;
 
 use Nette\Reflection\ClassType;
-use Pipas\Rest\IReadOnlyService;
 use Pipas\Rest\RestException;
 
 /**
@@ -76,11 +75,10 @@ class ResultMapper implements IResultMapper
 
 	/**
 	 * @param array|DataArray|DataHash|null $data
-	 * @param IReadOnlyService $repository
 	 * @param $classType
 	 * @return Contract
 	 */
-	public function mapEntity($data, IReadOnlyService $repository, $classType = Contract::class)
+	public function mapEntity($data, $classType = Contract::class)
 	{
 		if ($data === null) {
 			return null;
@@ -88,18 +86,17 @@ class ResultMapper implements IResultMapper
 		if ($classType == null) {
 			$classType = Contract::class;
 		}
-		$obj = new $classType($repository);
+		$obj = new $classType();
 		$mapped = $this->initDataHash($obj, $data);
 		return $mapped;
 	}
 
 	/**
 	 * @param DataHash|null $dataHash
-	 * @param IReadOnlyService|null $repository
 	 * @param string $classType
 	 * @return Contract|null
 	 */
-	public function convertDataHashToEntity(DataHash $dataHash = null, IReadOnlyService $repository = null, $classType = Contract::class)
+	public function convertDataHashToEntity(DataHash $dataHash = null,  $classType = Contract::class)
 	{
 		if ($dataHash == null) {
 			return null;
@@ -107,7 +104,7 @@ class ResultMapper implements IResultMapper
 		if ($classType == null) {
 			$classType = Contract::class;
 		}
-		$entity = new $classType($repository);
+		$entity = new $classType();
 		foreach ($dataHash->toArray() as $key => $val) {
 			$entity->$key = $val;
 		}
@@ -116,11 +113,10 @@ class ResultMapper implements IResultMapper
 
 	/**
 	 * @param DataSet|null $dataSet
-	 * @param IReadOnlyService|null $repository
 	 * @param string $classType
 	 * @return DataSet|null
 	 */
-	public function convertDataSetToEntitySet(DataSet $dataSet = null, IReadOnlyService $repository = null, $classType = Contract::class)
+	public function convertDataSetToEntitySet(DataSet $dataSet = null, $classType = Contract::class)
 	{
 		if ($dataSet == null) {
 			return null;
@@ -130,7 +126,7 @@ class ResultMapper implements IResultMapper
 		}
 		$set = new DataSet();
 		foreach ($dataSet->getData() as $key => $val) {
-			$set->offsetSet($key, $this->mapEntity($val, $repository, $classType));
+			$set->offsetSet($key, $this->mapEntity($val, $classType));
 		}
 		return $set;
 	}

@@ -2,12 +2,8 @@
 
 namespace Test\Libs\Rest;
 
-use Mockery;
-use Nette;
-use Pipas\Rest\IReadOnlyService;
 use Pipas\Rest\Result\Contract;
 use Pipas\Rest\Result\DataHash;
-use Tester;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -16,32 +12,12 @@ require __DIR__ . '/../../bootstrap.php';
 class ContractTest extends TestCase
 {
 
-	function test_service()
-	{
-		$service = Mockery::mock(IReadOnlyService::class);
-		$entity = new FakeContract($service);
-
-		Assert::same($service, $entity->getService());
-		$entity->setService(null);
-		Assert::null($entity->getService());
-	}
-
 	function test_primaryKey()
 	{
 		$id = 1234;
 		$entity = new FakeContract();
 		$entity->setId($id);
 		Assert::equal($id, $entity->getId());
-	}
-
-	function test_serialization()
-	{
-		$repository = Mockery::mock(IReadOnlyService::class);
-		$entity = new FakeContract($repository);
-		$ser = serialize($entity);
-		/** @var FakeContract $des */
-		$des = unserialize($ser);
-		Assert::null($des->getService());
 	}
 
 	function test_toString()
@@ -54,7 +30,6 @@ class ContractTest extends TestCase
 
 	function test_fromDataHash()
 	{
-		$repository = Mockery::mock(IReadOnlyService::class);
 		$data = array(
 			'id' => 1,
 			'name' => "Karel",
@@ -66,9 +41,8 @@ class ContractTest extends TestCase
 			$hash->$key = $val;
 		}
 
-		$fake = FakeContract::fromDataHash($hash, $repository);
+		$fake = FakeContract::fromDataHash($hash);
 		Assert::equal($hash->toArray(), $fake->toArray());
-		Assert::same($repository, $fake->getService());
 	}
 
 	function test_null_fromDataHash_null()
