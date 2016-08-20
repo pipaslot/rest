@@ -9,9 +9,8 @@ use Pipas\Rest\Result\DataSet;
  * Read only service for one concrete table
  * @author Petr Štipek <p.stipek@email.cz>
  */
-interface IReadOnlyService
+interface IReadOnlyService extends IBaseService
 {
-	const NAME_SUFFIX = "Service";
 
 	/**
 	 * Find one by ID
@@ -40,9 +39,4 @@ interface IReadOnlyService
 	 */
 	function findOneBy(array $query = array());
 
-	/**
-	 * Returns target service name
-	 * @return string
-	 */
-	function getName();
 }
