@@ -88,9 +88,10 @@ class ResultMapper_mapDataSetTest extends TestCase
 		Assert::true($res instanceof DataSet, get_class($res));
 	}
 
-	public function test_nestedDataSet(){
+	public function test_nestedDataSet()
+	{
 		$data = array(
-			"Contract" =>array(
+			"Contract" => array(
 				array(
 					'id' => 1,
 					'name' => "Karel",
@@ -99,12 +100,15 @@ class ResultMapper_mapDataSetTest extends TestCase
 						'id' => 5
 					),
 					'nullable' => null
-				))
+				)),
+			"Person" => array()
 		);
-		$res = $this->mapper->mapDataSet($data, 0, null);
+		$res = $this->mapper->mapDataSet($data, 1, null);
 		Assert::true($res instanceof DataSet, get_class($res));
-		$first = $res->getFirst();
+		$first = $res['Contract'];
 		Assert::true($first instanceof DataArray, get_class($first));
+		$second = $res['Person'];
+		Assert::true($second instanceof DataArray, get_class($second));
 	}
 
 

@@ -71,7 +71,7 @@ class ResultMapper implements IResultMapper
 			if (isset($row['id'])) {
 				$cData[$row['id']] = $this->mapDataHash($row);
 			} else {
-				$cData[$key] = $this->isArrayOfAssociativeArrays($row) ? $this->mapDataArray($row) : $this->mapDataHash($row);
+				$cData[$key] = ((is_array($row) AND count($row) == 0) OR $this->isArrayOfAssociativeArrays($row)) ? $this->mapDataArray($row) : $this->mapDataHash($row);
 			}
 
 		}
