@@ -68,7 +68,12 @@ class ResultMapper implements IResultMapper
 		}
 		$cData = new \ArrayObject();
 		foreach ($data as $key => $row) {
-			$cData[isset($row['id']) ? $row['id'] : $key] = $this->mapDataHash($row);
+			if (isset($row['id'])) {
+				$cData[$row['id']] = $this->mapDataHash($row);
+			} else {
+				$cData[$key] = $this->isArrayOfAssociativeArrays($row) ? $this->mapDataArray($row) : $this->mapDataHash($row);
+			}
+
 		}
 		return new $classType($cData, $totalCount);
 	}
@@ -96,7 +101,7 @@ class ResultMapper implements IResultMapper
 	 * @param string $classType
 	 * @return Contract|null
 	 */
-	public function convertDataHashToEntity(DataHash $dataHash = null,  $classType = Contract::class)
+	public function convertDataHashToEntity(DataHash $dataHash = null, $classType = Contract::class)
 	{
 		if ($dataHash == null) {
 			return null;

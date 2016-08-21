@@ -2,8 +2,6 @@
 
 namespace Test\Libs\Rest\Result;
 
-use Mockery;
-use Nette;
 use Pipas\Rest\Result\DataArray;
 use Pipas\Rest\Result\DataHash;
 use Pipas\Rest\Result\DataSet;
@@ -88,6 +86,25 @@ class ResultMapper_mapDataSetTest extends TestCase
 	{
 		$res = $this->mapper->mapDataSet($this->dataSet, 0, null);
 		Assert::true($res instanceof DataSet, get_class($res));
+	}
+
+	public function test_nestedDataSet(){
+		$data = array(
+			"Contract" =>array(
+				array(
+					'id' => 1,
+					'name' => "Karel",
+					'surname' => "Voprsalek",
+					'company' => array(
+						'id' => 5
+					),
+					'nullable' => null
+				))
+		);
+		$res = $this->mapper->mapDataSet($data, 0, null);
+		Assert::true($res instanceof DataSet, get_class($res));
+		$first = $res->getFirst();
+		Assert::true($first instanceof DataArray, get_class($first));
 	}
 
 
