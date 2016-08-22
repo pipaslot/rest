@@ -2,13 +2,12 @@
 
 namespace Test\Libs\Rest\Result;
 
-use Mockery;
-use Nette;
 use Pipas\Rest\RestException;
 use Pipas\Rest\Result\DataHash;
 use Pipas\Rest\Result\ResultMapper;
 use Tester\Assert;
-use Tester\TestCase;
+use Tester\TestCase as TestCase;
+use Pipas\Rest\Result\Contract as ContractAlias;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
@@ -67,6 +66,25 @@ class ResultMapperTestTest extends TestCase
 		Assert::exception(function () {
 			$this->mapper->getAnnotatedProperties(FakeMappingExample9::class);
 		}, RestException::class, null, RestException::CODE_NOT_INHERITED_FROM);
+	}
+
+	function test_propertyRead_getAnnotatedProperties_arrayOfProperties()
+	{
+		$expected = array(
+			'entity' => FakeMappingExample3::class
+		);
+		$res = $this->mapper->getAnnotatedProperties(FakeMappingExample10::class);
+
+		Assert::equal($expected, $res);
+	}
+	function test_alias_getAnnotatedProperties_arrayOfProperties()
+	{
+		$expected = array(
+			'entity' => ContractAlias::class
+		);
+		$res = $this->mapper->getAnnotatedProperties(FakeMappingExample11::class);
+
+		Assert::equal($expected, $res);
 	}
 }
 
@@ -138,6 +156,24 @@ class FakeMappingExample8
  * @property FakeMappingExample8 $entity
  */
 class FakeMappingExample9
+{
+
+}
+
+/**
+ * Property read test
+ * @property-read FakeMappingExample3 $entity
+ */
+class FakeMappingExample10 extends DataHash
+{
+
+}
+
+/**
+ * Alias test
+ * @property-read ContractAlias $entity
+ */
+class FakeMappingExample11 extends DataHash
 {
 
 }

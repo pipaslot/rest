@@ -231,17 +231,21 @@ class ResultMapper implements IResultMapper
 		}
 		foreach ($annotations[$type] as $val) {
 			$trimmed = trim(preg_replace('!\s+!', ' ', $val));//Replace multiple whitespaces
-			$className = strstr($trimmed, ' ', true);
+			$expectedClassName = $className = strstr($trimmed, ' ', true);
 			//Try find full name of existing class
 			if (!class_exists($className)) {
-				$className = $ref->getNamespaceName() . '\\' . trim($className, '\\');
-				if (!class_exists($className)) {
-					continue;
+				$expectedClassName = $ref->getNamespaceName() . '\\' . trim($className, '\\');
+
+				if (!class_exists($expectedClassName)) {
+					$expectedClassName = $this->getClassNameFromAlias($ref, $className);
+					if (!$expectedClassName OR !class_exists($expectedClassName)) {
+						continue;
+					}
 				}
 			}
-			$parents = class_parents($className);
-			if ($className != DataHash::class AND (!$parents OR !in_array(DataHash::class, $parents))) {
-				throw RestException::notInheritedForm($className, DataHash::class);
+			$parents = class_parents($expectedClassName);
+			if ($expectedClassName != DataHash::class AND (!$parents OR !in_array(DataHash::class, $parents))) {
+				throw RestException::notInheritedForm($expectedClassName, DataHash::class);
 			}
 
 			$prop = strstr($trimmed, '$');
@@ -252,8 +256,23 @@ class ResultMapper implements IResultMapper
 			if ($property AND !$property->protected) {
 				throw RestException::notProtectedProperty($ref->getName(), $propertyName);
 			}
-			$this->classProperties[$ref->getName()][$propertyName] = $className;
+			$this->classProperties[$ref->getName()][$propertyName] = $expectedClassName;
 		}
+	}
+
+	private function getClassNameFromAlias(ClassType $ref, $aliasSourceName)
+	{
+		$fileContent = file_get_contents($ref->fileName);
+
+		preg_match_all('/use ([a-zA-Z0-9_\\\\]+) as ([a-zA-Z0-9_\\\\]+);/', $fileContent, $matches);
+		if (is_array($matches) AND count($matches) > 0) {
+			for ($i = 0; $i < count($matches[0]); $i++) {
+				if ($matches[2][$i] == $aliasSourceName) {
+					return $matches[1][$i];
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
