@@ -36,7 +36,7 @@ foreach (Logger::getList() as $log) {
 				<td><?php echo($log->getTimeDelta() ? number_format($log->getTimeDelta() * 1000, 0, ".", " ") . " ms" : ''); ?></td>
 				<td><?php echo Dumper::toHtml($log->isCached()); ?></td>
 				<td><?php echo Dumper::toHtml($log->getParams(), array(Dumper::COLLAPSE => true)); ?></td>
-				<td><?php echo Dumper::toHtml($log->getResult(), array(Dumper::COLLAPSE => true, Dumper::DEPTH => 6, Dumper::TRUNCATE => 300)); ?></td>
+				<td><?php echo Dumper::toHtml($log->getResult(), array(Dumper::COLLAPSE => true, Dumper::DEPTH => 8, Dumper::TRUNCATE => 300)); ?></td>
 			</tr>
 			</tbody>
 			<?php
