@@ -81,7 +81,7 @@ class ResultMapper implements IResultMapper
 	/**
 	 * @param array|DataArray|DataHash|null $data
 	 * @param $classType
-	 * @return Contract
+	 * @return Contract|DataHash
 	 */
 	public function mapEntity($data, $classType = Contract::class)
 	{
@@ -163,7 +163,7 @@ class ResultMapper implements IResultMapper
 				} else if (is_array($value)) {
 					$hash->initializeProperty($key, $this->isAssociativeArray($value) ? $this->mapDataHash($value) : $this->mapDataArray($value));
 				} else {
-					$hash->initializeProperty($key, $value);
+					$hash->initializeProperty($key, $this->mapData($value));
 				}
 			}
 		}

@@ -5,7 +5,7 @@ namespace Pipas\Rest;
 use Nette\Object;
 
 /**
- * Basic context for connection to API
+ * Basic context for connection to API and collecting of services
  *
  * @author Petr Stipek <p.stipek@email.cz>
  *

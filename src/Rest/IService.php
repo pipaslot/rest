@@ -9,7 +9,7 @@ use Pipas\Rest\Result\IContract;
  *
  * @author Petr Štipek <p.stipek@email.cz>
  */
-interface IService extends IReadOnlyService
+interface IService extends IServiceReadOnly
 {
 
 	/**

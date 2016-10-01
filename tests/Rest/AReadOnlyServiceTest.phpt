@@ -137,7 +137,7 @@ namespace Tests {
 			$this->driver->shouldReceive("find");
 			$rep = $this->createRepository();
 			$rep->find($id);
-			$this->driver->shouldHaveReceived("find", array(FakeService::SERVICE_NAME, $id));
+			$this->driver->shouldHaveReceived("find", array(FakeService::SERVICE_NAME, $id, Contract::class));
 			Assert::true(true);
 		}
 
@@ -146,7 +146,7 @@ namespace Tests {
 			$this->driver->shouldReceive("findAll");
 			$rep = $this->createRepository();
 			$rep->findAll();
-			$this->driver->shouldHaveReceived("findAll", array(FakeService::SERVICE_NAME));
+			$this->driver->shouldHaveReceived("findAll", array(FakeService::SERVICE_NAME, Contract::class));
 		}
 
 		function test_findBy_delegateToContext()
@@ -155,7 +155,7 @@ namespace Tests {
 			$this->driver->shouldReceive("findBy");
 			$rep = $this->createRepository();
 			$rep->findBy($id);
-			$this->driver->shouldHaveReceived("findBy", array(FakeService::SERVICE_NAME, $id));
+			$this->driver->shouldHaveReceived("findBy", array(FakeService::SERVICE_NAME, $id, Contract::class));
 		}
 
 		function test_findOneBy_delegateToContext()
@@ -164,7 +164,7 @@ namespace Tests {
 			$this->driver->shouldReceive("findOneBy");
 			$rep = $this->createRepository();
 			$rep->findOneBy($id);
-			$this->driver->shouldHaveReceived("findOneBy", array(FakeService::SERVICE_NAME, $id));
+			$this->driver->shouldHaveReceived("findOneBy", array(FakeService::SERVICE_NAME, $id, Contract::class));
 		}
 
 	}

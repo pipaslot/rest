@@ -9,7 +9,6 @@ namespace Pipas\Rest\Result;
  */
 class Contract extends DataHash implements IContract
 {
-
 	/** @var int */
 	public $id;
 
@@ -36,36 +35,9 @@ class Contract extends DataHash implements IContract
 		return array();
 	}
 
-	protected function toArrayFilter($propertyName, $value)
-	{
-		if (parent::toArrayFilter($propertyName, $value) OR $propertyName === "_repository") {
-			return true;
-		}
-		return false;
-	}
-
 	function __toString()
 	{
 		return get_class($this) . ':' . $this->id;
-	}
-
-
-	/**
-	 * Convert entity to array for create operation
-	 * @return array
-	 */
-	function toArrayForCreate()
-	{
-		return $this->toArray(false, true);
-	}
-
-	/**
-	 * Convert entity to array for update operation
-	 * @return array
-	 */
-	function toArrayForUpdate()
-	{
-		return $this->toArray(false, true);
 	}
 
 	/**

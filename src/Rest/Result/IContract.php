@@ -4,21 +4,18 @@
 namespace Pipas\Rest\Result;
 
 /**
- * Read-write entity
- *
  * @author Petr Štipek <p.stipek@email.cz>
  */
-interface IContract extends IContractReadonly
+interface IContract extends \ArrayAccess, IToArrayConversion
 {
 	/**
-	 * Convert entity to array for create operation
-	 * @return array
+	 * @param $id
+	 * @return self
 	 */
-	function toArrayForCreate();
+	function setId($id);
 
 	/**
-	 * Convert entity to array for update operation
-	 * @return array
+	 * @return int|null
 	 */
-	function toArrayForUpdate();
+	function getId();
 }

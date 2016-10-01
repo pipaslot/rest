@@ -3,23 +3,18 @@
 namespace Pipas\Rest;
 
 use Nette\Utils\Strings;
-use Pipas\Rest\Result\IResultMapper;
-use Pipas\Rest\Result\ResultMapper;
 
 /**
  * @author Petr Štipek <p.stipek@email.cz>
  */
-class ABaseService implements IBaseService
+class AServiceBase implements IServiceBase
 {
-	/** @var ResultMapper */
-	protected $resultMapper;
 	/** @var IDriver */
 	protected $driver;
 
-	function __construct(IDriver $driver, IResultMapper $resultMapper = null)
+	function __construct(IDriver $driver)
 	{
 		$this->driver = $driver;
-		$this->resultMapper = $resultMapper == null ? ResultMapper::create() : $resultMapper;
 	}
 
 	/**

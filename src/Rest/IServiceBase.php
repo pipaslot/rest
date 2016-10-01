@@ -5,7 +5,7 @@ namespace Pipas\Rest;
 /**
  * @author Petr Štipek <p.stipek@email.cz>
  */
-interface IBaseService
+interface IServiceBase
 {
 
 	const NAME_SUFFIX = "Service";

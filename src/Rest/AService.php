@@ -9,7 +9,7 @@ use Pipas\Rest\Result\IContract;
  *
  * @author Petr Štipek <p.stipek@email.cz>
  */
-abstract class AService extends AReadOnlyService implements IService
+abstract class AService extends AServiceReadOnly implements IService
 {
 
 	/**
@@ -19,10 +19,22 @@ abstract class AService extends AReadOnlyService implements IService
 	 */
 	public function create(IContract $entity)
 	{
-		$arr = $entity->toArrayForCreate();
-		if (isset($arr['id'])) unset($arr['id']);
+		$arr = $this->prepareDataForCreate($entity->toArray(false, true), $entity);
+		if (isset($arr['id'])) {
+			unset($arr['id']);
+		}
 		$entity->setId($this->driver->create($this->getName(), $arr));
 		return $entity;
+	}
+
+	/**
+	 * @param array $data
+	 * @param IContract $entity
+	 * @return array
+	 */
+	protected function prepareDataForCreate(array $data, IContract $entity)
+	{
+		return $data;
 	}
 
 	/**
@@ -33,10 +45,24 @@ abstract class AService extends AReadOnlyService implements IService
 	 */
 	public function update(IContract $entity)
 	{
-		if (!$entity->getId()) throw new RestException("Missing entity ID");
-		$arr = $entity->toArrayForUpdate();
-		if (isset($arr['id'])) unset($arr['id']);
+		if (!$entity->getId()) {
+			throw new RestException("Missing entity ID");
+		}
+		$arr = $this->prepareDataForUpdate($entity->toArray(false, true), $entity);
+		if (isset($arr['id'])) {
+			unset($arr['id']);
+		}
 		return $this->driver->update($this->getName() . '/' . $entity->getId(), $arr);
+	}
+
+	/**
+	 * @param array $data
+	 * @param IContract $entity
+	 * @return array
+	 */
+	protected function prepareDataForUpdate(array $data, IContract $entity)
+	{
+		return $data;
 	}
 
 	/**
@@ -47,7 +73,9 @@ abstract class AService extends AReadOnlyService implements IService
 	 */
 	public function delete(IContract $entity)
 	{
-		if (!$entity->getId()) throw new RestException("Missing entity ID");
+		if (!$entity->getId()) {
+			throw new RestException("Missing entity ID");
+		}
 		return $this->driver->delete($this->getName() . '/' . $entity->getId());
 	}
 

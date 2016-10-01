@@ -18,14 +18,12 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
 	 * Initialize property by ResultMapper
 	 * @param string $propertyName
 	 * @param mixed $value
-	 * @param $defaultObjectType
 	 * @return bool
-	 * @internal
 	 */
-    public function initializeProperty($propertyName, $value, $defaultObjectType = DataHash::class)
+    public function initializeProperty($propertyName, $value)
     {
 		if (in_array($propertyName, $this->_initializedProperties)) return false;
-		$this->$propertyName = ResultMapper::create()->mapData($value, $defaultObjectType);
+		$this->$propertyName = $value;
 		$this->_initializedProperties[] = $propertyName;
         return true;
     }
@@ -143,9 +141,10 @@ class DataHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorA
     public function __get($name)
     {
         $method = 'get' . ucfirst($name);
-		$list = ResultMapper::create()->getAnnotatedProperties(get_class($this));
+		$mapper = ResultMapper::create();
+		$list =$mapper->getAnnotatedProperties(get_class($this));
         if (isset($list[$name])) {
-            $this->initializeProperty($name, array(), $list[$name]);
+            $this->initializeProperty($name, $mapper->mapData(array(), $list[$name]));
         }
         if (method_exists($this, $method)) {
             return $this->$method();

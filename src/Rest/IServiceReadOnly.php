@@ -9,7 +9,7 @@ use Pipas\Rest\Result\DataSet;
  * Read only service for one concrete table
  * @author Petr Štipek <p.stipek@email.cz>
  */
-interface IReadOnlyService extends IBaseService
+interface IServiceReadOnly extends IServiceBase
 {
 
 	/**

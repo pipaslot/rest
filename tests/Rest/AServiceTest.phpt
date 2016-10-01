@@ -109,7 +109,7 @@ class AServiceTest extends TestCase
 		$rep = $this->createService();
 		$entity = new FakeContract();
 		$entity->id = 1;
-		$arr = $entity->toArrayForCreate();
+		$arr = $entity->toArray(false,true);
 		$rep->create($entity);
 		unset($arr['id']);
 
@@ -135,7 +135,7 @@ class AServiceTest extends TestCase
 		$entity = new FakeContract();
 		$entity->id = 1;
 		$rep->update($entity);
-		$arr = $entity->toArrayForUpdate();
+		$arr = $entity->toArray(false,true);
 		unset($arr['id']);
 		$this->driver->shouldHaveReceived("update", array($rep->getName() . '/' . $entity->id, $arr));
 		Assert::true(true);
